@@ -11,7 +11,7 @@ module NeoScout
   end
 
 
-  class Counter
+  class NeoScout
     def initialize(args)
       @typer     = args[:typer]
       @validator = args[:validator]
