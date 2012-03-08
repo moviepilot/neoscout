@@ -33,4 +33,22 @@ module NeoScout
     end
   end
 
+  class HashWithDefault < Hash
+    def initialize(&blk)
+      super
+      @default = blk
+    end
+
+    def default(key)
+      @default.call(key)
+    end
+  end
+end
+
+class Hash
+
+  def self.newWithDefault(&blk)
+    NeoScout::HashWithDefault.new(&blk)
+  end
+
 end

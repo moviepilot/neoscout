@@ -36,4 +36,17 @@ module NeoScout
     end
   end
 
+  describe HashWithDefault do
+    it 'computes a default value again and again' do
+      count   = 0
+      default = lambda { |key| count += 1 }
+      @it     = HashWithDefault.new &default
+      [ @it.default(nil), @it.default(:y), @it[0] ].should be == [ 1, 2, 3 ]
+    end
+
+    it 'adds a utility method to the Hash class' do
+      Hash.newWithDefault { |key| 1 }.class.should be == HashWithDefault
+    end
+  end
+
 end
