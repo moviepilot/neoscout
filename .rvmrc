@@ -1,2 +1,2 @@
 rvm --create use jruby-1.6.5@neoscout
-export JRUBY_OPTS="$JRUBY_OPTS --1.9"
+export JRUBY_OPTS="$JRUBY_OPTS -Xcompat.version=1.9"

@@ -24,6 +24,7 @@ desc 'Run irb in project environment'
 task :console do
   require 'irb'
   ARGV.clear
+  IRB.conf[:USE_READLINE] = false if ENV['JRUBY_OPTS'] =~ /--ng/
   IRB.start
 end
 
