@@ -1,4 +1,6 @@
 .idea
+.bundle
+doc
 html
 coverage
 Gemfile.lock
