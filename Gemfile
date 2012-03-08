@@ -8,6 +8,7 @@ gem 'activesupport', '3.1.3'
 
 group :development do
   gem 'rake'
+  gem 'irbtools'
 end
 
 group :test do

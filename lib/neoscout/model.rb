@@ -26,12 +26,12 @@ module NeoScout
       class ConstraintSet < Set
         def initialize(type)
           @type = type
-          super
+          super []
         end
 
         def <<(o)
-          raise ArgumentError unless o.class == Constraints::Constraint && o.constraints.include?(@type)
-          super.<<(o)
+          raise ArgumentError unless o.is_a?(Constraints::Constraint) && o.constraints.include?(@type)
+          super(o)
         end
       end
 
@@ -41,7 +41,7 @@ module NeoScout
       end
 
       def [](key)
-        if @store.has_key?(key) then @store[key] else @store[key] = ConstraintSet.new(@type) end
+        if @store[key] then @store[key] else @store[key] = ConstraintSet.new(@type) end
       end
     end
 
