@@ -3,12 +3,12 @@ require 'set'
 module NeoScout
 
   class Iterator
-    def for_nodes(node_type = nil)
-      raise NotImplementedError
+    def iter_nodes(args)
+      raise NotImplentedError
     end
 
-    def for_edges(edge_type = nil)
-      raise NotImplementedError
+    def iter_edges(args)
+      raise NotImplentedError
     end
   end
 
@@ -20,12 +20,6 @@ module NeoScout
     def edge_type(edge)
       raise NotImplementedError
     end
-
-    def iter_node_types(*blk)
-    end
-
-    def iter_edge_types(*blk)
-    end
   end
 
   class Counts
@@ -33,19 +27,30 @@ module NeoScout
     attr_reader :all_edges
     attr_reader :nodes_by_type
     attr_reader :edges_by_type
-    attr_reader :node_props
-    attr_reader :edge_props
-    attr_reader :node_props_by_type
-    attr_reader :edge_props_by_type
+    attr_reader :node_constrs
+    attr_reader :edge_constrs
+    attr_reader :node_constrs_by_type
+    attr_reader :edge_constrs_by_type
 
     def initialize
+      reset
+    end
+
+    def reset
       @all_nodes     = Counter.new
       @all_edges     = Counter.new
+      @nodes_by_type = HashWithDefault.new { |node_type| Counter.new }
+      @edges_by_type = HashWithDefault.new { |edge_type| Counter.new }
+      @node_constrs  = HashWithDefault.new { |node_constr| Counter.new }
+      @edge_constrs  = HashWithDefault.new { |edge_constr| Counter.new }
+      @node_constrs_by_type = HashWithDefault.new { |node_type| HashWithDefault.new { |node_constr| Counter.new } }
+      @edge_constrs_by_type = HashWithDefault.new { |edge_type| HashWithDefault.new { |edge_constr| Counter.new } }
     end
+
   end
 
   class Verifier
-    attr_reader :node_constraints, :edge_constraints
+    attr_reader :node_constrs, :edge_constrs
 
     class ConstraintSet < Set
       def initialize(type)
@@ -60,8 +65,8 @@ module NeoScout
     end
 
     def initialize
-      @node_constraints = HashWithDefault.new { |key| ConstraintSet.new :nodes }
-      @edge_constraints = HashWithDefault.new { |key| ConstraintSet.new :edges }
+      @node_constrs = HashWithDefault.new { |node_type| ConstraintSet.new :nodes }
+      @edge_constrs = HashWithDefault.new { |edge_type| ConstraintSet.new :edges }
     end
   end
 end

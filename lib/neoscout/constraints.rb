@@ -55,7 +55,7 @@ module NeoScout
         raise ArgumentError unless @min.class == Fixnum
         raise ArgumentError unless @max.class == Fixnum || @max == :inf
 
-        @constraints = [:edges]
+        @constraints = [:nodes]
       end
 
       def to_s

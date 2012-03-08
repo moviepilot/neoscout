@@ -11,6 +11,10 @@ module NeoScout
       @total = 0
     end
 
+    def incr(ok)
+      if ok then incr_ok else incr_failed end
+    end
+
     def incr_ok
       @ok    += 1
       @total += 1
@@ -47,7 +51,7 @@ end
 
 class Hash
 
-  def self.newWithDefault(&blk)
+  def self.new_with_default(&blk)
     NeoScout::HashWithDefault.new(&blk)
   end
 

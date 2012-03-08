@@ -45,7 +45,7 @@ module NeoScout
     end
 
     it 'adds a utility method to the Hash class' do
-      Hash.newWithDefault { |key| 1 }.class.should be == HashWithDefault
+      Hash.new_with_default { |key| 1 }.class.should be == HashWithDefault
     end
   end
 

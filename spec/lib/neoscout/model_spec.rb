@@ -10,24 +10,22 @@ module NeoScout
     end
 
     it 'initialize node_constraints' do
-      @it.node_constraints[:movie].length.should be == 0
+      @it.node_constrs[:movie].length.should be == 0
     end
 
     it 'initialize edge_constraints' do
-      @it.node_constraints[:movie].length.should be == 0
+      @it.node_constrs[:movie].length.should be == 0
     end
 
     it 'should only store node_constraints in node_constraints' do
-      @it.node_constraints[:dog] << (Constraints::PropConstraint.new name: 'dingo')
-      lambda { @it.node_constraints[:dog] << Constraints::CardConstraint.new }.should raise_error(ArgumentError)
+      @it.node_constrs[:dog] << (Constraints::PropConstraint.new name: 'dingo')
+      @it.node_constrs[:dog] << Constraints::CardConstraint.new
     end
 
 
     it 'should only store edge_constraints in edge_constraints' do
-      lambda {
-        @it.edge_constraints[:dog] << (Constraints::PropConstraint.new name: 'dingo')
-        @it.edge_constraints[:dog] << Constraints::CardConstraint.new
-      }.should_not raise_error(ArgumentError)
+      @it.edge_constrs[:dog] << (Constraints::PropConstraint.new name: 'dingo')
+      lambda { @it.edge_constrs[:dog] << Constraints::CardConstraint.new }.should raise_error(ArgumentError)
     end
   end
 

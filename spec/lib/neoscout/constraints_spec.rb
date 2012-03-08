@@ -14,11 +14,11 @@ module NeoScout
         lambda { PropConstraint.new name: '' }.should raise_error(ArgumentError)
       end
 
-      it 'should be a node_constraint' do
+      it 'should be a node_constr' do
         (PropConstraint.new name: 'dingo').constraints.should include(:nodes)
       end
 
-      it 'should be an edge_constraint' do
+      it 'should be an edge_constr' do
         (PropConstraint.new name: 'dingo').constraints.should include(:edges)
       end
 
@@ -64,12 +64,12 @@ module NeoScout
         lambda { CardConstraint.new min: '', max: 1 }.should raise_error(ArgumentError)
       end
 
-      it 'should not be a node_constraint' do
-        (CardConstraint.new min: 0, max: 1).constraints.should_not include(:nodes)
+      it 'should be a node_constr' do
+        (CardConstraint.new min: 0, max: 1).constraints.should include(:nodes)
       end
 
-      it 'should be an edge_constraint' do
-        (CardConstraint.new min: 0, max: 1).constraints.should include(:edges)
+      it 'should not be an edge_constr' do
+        (CardConstraint.new min: 0, max: 1).constraints.should_not include(:edges)
       end
 
       it 'should properly implement to_str' do
