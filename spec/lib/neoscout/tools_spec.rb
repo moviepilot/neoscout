@@ -72,6 +72,7 @@ module NeoScout
 
   end
 
+
   describe HashWithDefault do
     it 'computes a default value again and again' do
       count   = 0
@@ -92,6 +93,7 @@ module NeoScout
       @it.lookup(:b).should be == nil
     end
   end
+
 
   describe JSON do
 
@@ -125,5 +127,7 @@ module NeoScout
       (JSON.cd @it, [:a, :b])[:c] = 3
       @it.should be == { :a => { :b => { :c => 3 }, :y => 2 }, :x => 5 }
     end
+
   end
+
 end

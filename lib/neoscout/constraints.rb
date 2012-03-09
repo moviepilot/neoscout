@@ -3,15 +3,7 @@ module NeoScout
   module Constraints
 
     class Constraint
-      attr_reader :constraints
-
-      def initialize(args)
-        @constraints = []
-      end
-
-      def complying?(obj)
-        true
-      end
+      def satisfied_by?(obj) ; raise NotImplementedError end
     end
 
     class PropConstraint < Constraint
@@ -23,10 +15,8 @@ module NeoScout
         @opt   = args[:opt]
         @type  = args[:type]
 
-        raise ArgumentError unless @name.class == String
+        raise ArgumentError unless @name.kind_of? String
         raise ArgumentError unless @name.length > 0
-
-        @constraints = [:nodes, :edges]
       end
 
       def to_s
@@ -52,10 +42,8 @@ module NeoScout
         @dir = :any unless @dir
 
         raise ArgumentError unless [:directed, :undirected, :any].include?(@dir)
-        raise ArgumentError unless @min.class == Fixnum
-        raise ArgumentError unless @max.class == Fixnum || @max == :inf
-
-        @constraints = [:nodes]
+        raise ArgumentError unless @min.kind_of? Fixnum
+        raise ArgumentError unless (@max.kind_of?(Fixnum) || @max == :inf)
       end
 
       def to_s

@@ -14,14 +14,6 @@ module NeoScout
         lambda { PropConstraint.new name: '' }.should raise_error(ArgumentError)
       end
 
-      it 'should be a node_constr' do
-        (PropConstraint.new name: 'dingo').constraints.should include(:nodes)
-      end
-
-      it 'should be an edge_constr' do
-        (PropConstraint.new name: 'dingo').constraints.should include(:edges)
-      end
-
       it 'should properly implement to_str' do
         (PropConstraint.new name: 'dingo').to_s.should be == 'dingo'
         (PropConstraint.new name: 'dingo', opt: true).to_s.should be == 'dingo (opt.)'
@@ -32,15 +24,15 @@ module NeoScout
     describe CardConstraint do
 
       it 'should set min to 0 by default' do
-        CardConstraint.new.min.should == 0
+        CardConstraint.new.min.should be == 0
       end
 
       it 'should set max to :inf by default' do
-        CardConstraint.new.max.should == :inf
+        CardConstraint.new.max.should be == :inf
       end
 
       it 'should set dir to :any by default' do
-        CardConstraint.new.dir.should == :any
+        CardConstraint.new.dir.should be == :any
       end
 
       it 'should accept :directed for dir' do
@@ -62,14 +54,6 @@ module NeoScout
 
       it 'should require min to be a fixnum' do
         lambda { CardConstraint.new min: '', max: 1 }.should raise_error(ArgumentError)
-      end
-
-      it 'should be a node_constr' do
-        (CardConstraint.new min: 0, max: 1).constraints.should include(:nodes)
-      end
-
-      it 'should not be an edge_constr' do
-        (CardConstraint.new min: 0, max: 1).constraints.should_not include(:edges)
       end
 
       it 'should properly implement to_str' do

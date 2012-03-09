@@ -64,7 +64,7 @@ module NeoScout
 
     def <<(elem)
       raise ArgumentError unless valid_elem?(elem)
-      super << elem
+      super elem
     end
 
   end

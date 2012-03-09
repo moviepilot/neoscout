@@ -12,54 +12,48 @@ module NeoScout
 
     def count_nodes(args)
       counts = args[:counts]
-      @iterator.iter_nodes(args) { |node| count_node(counts, node) }
+      @iterator.iter_nodes(args) do |node|
+        node_type = @typer.node_type(node)
+        node_ok   = process_node(counts, node_type, node)
+        counts.count_node(type, node_ok)
+      end
       counts
     end
 
     def count_edges(args)
       counts = args[:counts]
-      @iterator.iter_edges(args) { |edge| count_edge(counts, edge) }
+      @iterator.iter_edges(args) do |edge|
+        edge_type = @typer.edge_type(edge)
+        edge_ok   = process_edge(counts, edge_type, edge)
+        counts.count_edge(type, edge_ok)
+      end
       counts
     end
 
     protected
 
-    def count_node(counts, node)
-      node_ok   = true
-      node_type = @typer.node_type(node)
+    def process_node(counts, node_type, node)
+      node_ok = true
 
-      node_constrs_count         = counts.node_constrs
-      node_constrs_by_type_count = counts.node_constrs_by_type[node_type]
-
-      @verifier.node_constrs[node_type].each do |c|
-        c_ok     = c.complying?(node)
-        node_ok &= c_ok
-
-        node_constrs_count[c].incr(c_ok)
-        node_constrs_by_type_count[c].incr(c_ok)
+      @verifier.node_props[node_type].each do |constr|
+        prop_ok   = constr.satisfied_by?(node)
+        counts.count_node_prop(type, constr.name, prop_ok)
+        node_ok &&= prop_ok
       end
 
-      counts.all_nodes.incr(node_ok)
-      counts.nodes_by_type[node_type].incr(node_ok)
+      node_ok
     end
 
-    def count_edge(counts, edge)
-      edge_ok   = true
-      edge_type = @typer.edge_type(edge)
+    def process_edge(counts, edge_type, edge)
+      edge_ok = true
 
-      edge_constrs_count         = counts.edge_constrs
-      edge_constrs_by_type_count = counts.edge_constrs_by_type[edge_type]
-
-      @verifier.edge_constrs[edge_type].each do |c|
-        c_ok     = c.complying?(edge)
-        edge_ok &= c_ok
-
-        edge_constrs_count[c].incr(c_ok)
-        edge_constrs_by_type_count[c].incr(c_ok)
+      @verifier.edge_props[edge_type].each do |constr|
+        prop_ok   = constr.satisfied_by?(edge)
+        counts.count_edge_prop(type, constr.name, prop_ok)
+        edge_ok &&= prop_ok
       end
 
-      counts.all_edges.incr(edge_ok)
-      counts.edges_by_type[edge_type].incr(edge_ok)
+      edge_ok
     end
   end
 
