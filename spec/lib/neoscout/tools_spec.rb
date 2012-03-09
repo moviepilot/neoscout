@@ -93,4 +93,37 @@ module NeoScout
     end
   end
 
+  describe JSON do
+
+    it 'should cd into hashes' do
+      @it = {}
+      JSON.cd @it, [:a]
+      @it.should be == { :a => {} }
+    end
+
+    it 'should cd into hashes deeply' do
+      @it = {}
+      JSON.cd @it, [:a, :b]
+      @it.should be == { :a => { :b => {} } }
+    end
+
+
+    it 'should return the last hash for further writing' do
+      @it = {}
+      (JSON.cd @it, [:a, :b])[:c] = 3
+      @it.should be == { :a => { :b => { :c => 3 } } }
+    end
+
+    it 'should not clobber unrelated hashes' do
+      @it = { :x => 5 }
+      (JSON.cd @it, [:a, :b])[:c] = 3
+      @it.should be == { :a => { :b => { :c => 3 } }, :x => 5 }
+    end
+
+    it 'should not clobber existing hashes' do
+      @it = { :a => { :y => 2 }, :x => 5 }
+      (JSON.cd @it, [:a, :b])[:c] = 3
+      @it.should be == { :a => { :b => { :c => 3 }, :y => 2 }, :x => 5 }
+    end
+  end
 end

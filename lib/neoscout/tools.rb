@@ -88,26 +88,12 @@ module NeoScout
 
   module JSON
 
-    def cd(json, *args)
+    def self.cd(json, args)
       current = json
-      args.each do |arg|
-        last    = current
-        current = if current.class == Array then
-          if arg < current.length then
-            current[arg]
-          else
-            current[arg] = if arg.class == Fixnum then [] else {} end
-          end
-        else
-          if current.has_key?(arg) then
-            current[arg]
-          else
-            current[arg] = if arg.class == Fixnum then [] else {} end
-          end
-        end
+      args.each do |k|
+        current = (current[k] = if current.has_key? k then current[k] else {} end)
       end
+      current
     end
-
   end
-
 end
