@@ -35,9 +35,42 @@ module NeoScout
     def num_total
       @total
     end
+
+    def to_s
+      "(#{num_ok}/#{num_failed}/#{num_total})"
+    end
+
+  end
+
+  class ConstrainedSet < Set
+
+    def initialize(*args, &elem_test)
+      @elem_test = elem_test
+      case
+        when args.length == 0
+          super
+        when args.length == 1
+          args = args[0]
+          raise ArgumentError unless (args.all? &@elem_test)
+          super args
+        else
+          raise ArgumentError
+      end
+    end
+
+    def valid_elem?(elem)
+      @elem_test.call(elem)
+    end
+
+    def <<(elem)
+      raise ArgumentError unless valid_elem?(elem)
+      super << elem
+    end
+
   end
 
   class HashWithDefault < Hash
+
     def initialize(&blk)
       super
       @default = blk
@@ -46,13 +79,35 @@ module NeoScout
     def default(key)
       @default.call(key)
     end
+
+    def lookup(key, default_value = nil)
+      if has_key?(key) then self[key] else default_value end
+    end
+
   end
-end
 
-class Hash
+  module JSON
 
-  def self.new_with_default(&blk)
-    NeoScout::HashWithDefault.new(&blk)
+    def cd(json, *args)
+      current = json
+      args.each do |arg|
+        last    = current
+        current = if current.class == Array then
+          if arg < current.length then
+            current[arg]
+          else
+            current[arg] = if arg.class == Fixnum then [] else {} end
+          end
+        else
+          if current.has_key?(arg) then
+            current[arg]
+          else
+            current[arg] = if arg.class == Fixnum then [] else {} end
+          end
+        end
+      end
+    end
+
   end
 
 end

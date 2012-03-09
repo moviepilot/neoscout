@@ -1,7 +1,24 @@
 require 'spec/spec_helper'
 require 'neoscout/neoscout'
+require 'neoscout/json_schema'
 
 module NeoScout
+
+  describe ConstrainedSet do
+
+    it 'should check arguments on initialize' do
+      lambda { ConstrainedSet.new { |o| o.kind_of? Fixnum } }.should_not raise_error(ArgumentError)
+      lambda { ConstrainedSet.new([1, 2]) { |o| o.kind_of? Fixnum } }.should_not raise_error(ArgumentError)
+      lambda { ConstrainedSet.new([:a]) { |o| o.kind_of? Fixnum } }.should raise_error(ArgumentError)
+    end
+
+    it 'should check elements on append' do
+      lambda { (ConstrainedSet.new { |o| o.kind_of? Fixnum }) << 0 }.should_not raise_error(ArgumentError)
+      lambda { (ConstrainedSet.new { |o| o.kind_of? Fixnum }) << :a }.should raise_error(ArgumentError)
+    end
+
+  end
+
 
   describe Counter do
 
@@ -34,6 +51,25 @@ module NeoScout
       @it.num_failed.should be == 0
       @it.num_total.should be == 0
     end
+
+    it 'is convertible to string' do
+      @it = Counter.new
+      @it.incr_ok
+      @it.incr_ok
+      @it.incr_ok
+      @it.incr_failed
+      @it.to_s.should be == "(3/1/4)"
+    end
+
+    it 'is convertible to json' do
+      @it = Counter.new
+      @it.incr_ok
+      @it.incr_ok
+      @it.incr_ok
+      @it.incr_failed
+      @it.to_json.should be == [ 3, 1, 4 ]
+    end
+
   end
 
   describe HashWithDefault do
@@ -44,8 +80,16 @@ module NeoScout
       [ @it.default(nil), @it.default(:y), @it[0] ].should be == [ 1, 2, 3 ]
     end
 
-    it 'adds a utility method to the Hash class' do
-      Hash.new_with_default { |key| 1 }.class.should be == HashWithDefault
+    it 'can lookup via lookup()' do
+      @it = HashWithDefault.new { |key| 1 }
+      @it[:a] = 2
+      @it.lookup(:a).should be == 2
+    end
+
+    it 'can lookup without creating a default value' do
+      @it = HashWithDefault.new { |key| 1 }
+      @it[:a] = 2
+      @it.lookup(:b).should be == nil
     end
   end
 
