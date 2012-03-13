@@ -62,23 +62,9 @@ module NeoScout
       @elem_test.call(elem)
     end
 
-    def add(elem)
+    def <<(elem)
       raise ArgumentError unless valid_elem?(elem)
       super elem
-    end
-
-    def to_s
-      first  = true
-      result = "#<NeoScout::ConstrainedSet: ["
-      each { |elem|
-        if first
-          result <<= "#{elem.to_s}"
-          first    = false
-        else
-          result <<= ", #{elem.to_s}"
-        end
-      }
-      result <<= "]>"
     end
 
   end
@@ -99,19 +85,7 @@ module NeoScout
     end
 
     def lookup(key, default_value = nil)
-      if has_key?(key) then super(key) else self[key]=default_value end
-    end
-
-    def map_values(&blk)
-      new_hash = {}
-      each_pair do |k,v|
-        new_hash[k] = blk.call(v)
-      end
-      new_hash
-    end
-
-    def to_s
-      (self.map_values { |v| v.to_s }).to_s
+      if has_key?(key) then self[key] else self[key]=default_value end
     end
 
   end
@@ -121,7 +95,11 @@ module NeoScout
     def self.cd(json, args)
       current = json
       args.each do |k|
-        current = (current[k] = if current.has_key? k then current[k] else {} end)
+        if current.has_key? k
+          current = current[k]
+        else
+          current = current[k] = {}
+        end
       end
       current
     end
