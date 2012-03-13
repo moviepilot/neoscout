@@ -26,7 +26,8 @@ module NeoScout
       end
 
       before(:each) do
-        @schema_json = load_schema
+        @schema_json   = load_schema
+        @schema_counts = load_counts
 
         ::Neo4j::Transaction.run do
           @user_a = ::Neo4j::Node::new type: 'users', name: 'Alfons'
@@ -60,9 +61,10 @@ module NeoScout
         @it.verifier.init_from_json @schema_json
         @counts = @it.new_counts
         @it.count_nodes counts: @counts
+        @it.count_edges counts: @counts
         @counts.add_to_json @schema_json
         # puts @schema_json.to_json
-        load_counts.should be == @schema_json
+        @schema_json.should be == @schema_counts
       end
 
     end

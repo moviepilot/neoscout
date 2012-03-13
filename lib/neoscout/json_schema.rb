@@ -45,25 +45,25 @@ module NeoScout
 
       nodes_json = JSON.cd(json, %w(nodes))
       @typed_nodes.each_pair do |type, count|
-        JSON.cd(nodes_json, [type])['count'] = count.to_json
+        JSON.cd(nodes_json, [type])['counts'] = count.to_json
       end
 
       nodes_json = JSON.cd(json, %w(nodes))
       @typed_node_props.each_pair do |type, props|
         props.each_pair do |name, count|
-          JSON.cd(nodes_json, [type, 'properties', name])['count'] = count.to_json
+          JSON.cd(nodes_json, [type, 'properties', name])['counts'] = count.to_json
         end
       end
 
       edges_json = JSON.cd(json, %w(edges))
       @typed_edges.each_pair do |type, count|
-        JSON.cd(edges_json, [type])['count'] = count.to_json
+        JSON.cd(edges_json, [type])['counts'] = count.to_json
       end
 
       edges_json = JSON.cd(json, %w(edges))
       @typed_edge_props.each_pair do |type, props|
         props.each_pair do |name, count|
-          JSON.cd(edges_json, [type, 'properties', name])['count'] = count.to_json
+          JSON.cd(edges_json, [type, 'properties', name])['counts'] = count.to_json
         end
       end
     end

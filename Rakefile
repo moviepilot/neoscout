@@ -5,7 +5,6 @@ require 'rake'
 require 'rdoc/task'
 require 'rspec'
 require 'rspec/core/rake_task'
-require 'lib/version'
 
 desc 'Run all rspecs'
 RSpec::Core::RakeTask.new(:spec) do |spec|
