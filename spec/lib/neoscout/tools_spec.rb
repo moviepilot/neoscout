@@ -17,6 +17,13 @@ module NeoScout
       lambda { (ConstrainedSet.new { |o| o.kind_of? Fixnum }) << :a }.should raise_error(ArgumentError)
     end
 
+    it 'should append' do
+      c = ConstrainedSet.new { |o| true }
+      c << 1
+      c << 2
+      c.to_a.should be == [1, 2]
+    end
+
   end
 
 

@@ -1,6 +1,6 @@
 source "http://rubygems.org"
 
-# gem 'sinatra'
+gem 'sinatra'
 # gem 'httparty'
 gem 'json', '>=1.6.5'
 gem 'activemodel', '3.1.3'

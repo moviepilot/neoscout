@@ -29,4 +29,24 @@ module NeoScout
     end
   end
 
+  describe Scout do
+
+    before(:each) do
+      @it = Scout.new
+    end
+
+    it 'initialize verifier default value' do
+      @it.verifier.should_not be nil?
+    end
+
+    it 'initialize iterator default value' do
+      @it.iterator.should_not be nil?
+    end
+
+    it 'initialize typer default value' do
+      @it.typer.should_not be nil?
+    end
+
+  end
+
 end

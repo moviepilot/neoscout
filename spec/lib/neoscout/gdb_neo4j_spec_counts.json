@@ -1,0 +1,31 @@
+{"nodes":{
+    "users":{
+        "properties":{
+            "type":{
+                "relevant":true,
+                "count":[6, 0, 6]
+            },
+            "name":{
+                "relevant":true,
+                "count":[6, 0, 6]
+            }
+        },
+        "count":[6, 0, 6]
+    },
+    "challenges":{
+        "properties":{
+            "type":{
+                "relevant":true,
+                "count":[1, 0, 1]
+            },
+            "descr":{
+                "relevant":false,
+                "count":[1, 0, 1]
+            }
+        },
+        "count":[1, 0, 1]
+    }
+}, "edges":{}, "all":{
+    "node_counts":[7, 0, 7],
+    "edge_counts":[0, 0, 0]
+}}

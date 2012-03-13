@@ -16,17 +16,19 @@ module NeoScout
   class Verifier
 
     def init_from_json(json)
-      json['nodes'].keys.each_with_index do |type_name, type_json|
-        type_json['properties'].each_with_index do |prop_name, prop_json|
-          prop_constr = Constraints::PropConstraint.new name: prop_name, opt: !prop_json['relevant']
-          @node_props[type_name] << prop_constr
+      JSON.cd(json, %w(nodes)).each_pair do |type_name, type_json|
+        JSON.cd(type_json, %w(properties)).each_pair do |prop_name, prop_json|
+          prop_constr = new_node_prop_constr name: prop_name, opt: !prop_json['relevant']
+          prop_set    = @node_props[type_name]
+          prop_set << prop_constr
         end
       end
 
-      json['edges'].keys.each_with_index do |type_name, type_json|
-        type_json['properties'].each_with_index do |prop_name, prop_json|
-          prop_constr = Constraints::PropConstraint.new name: prop_name, opt: !prop_json['relevant']
-          @edge_props[type_name] << prop_constr
+      JSON.cd(json, %w(edges)).each_pair do |type_name, type_json|
+        JSON.cd(type_json, %w(properties)).each_pair do |prop_name, prop_json|
+          prop_constr = new_edge_prop_constr name: prop_name, opt: !prop_json['relevant']
+          prop_set    = @node_props[type_name]
+          prop_set << prop_constr
         end
       end
     end
@@ -42,25 +44,25 @@ module NeoScout
       all_json['edge_counts'] = @all_edges.to_json
 
       nodes_json = JSON.cd(json, %w(nodes))
-      @typed_nodes.each_with_index do |type, count|
+      @typed_nodes.each_pair do |type, count|
         JSON.cd(nodes_json, [type])['count'] = count.to_json
       end
 
       nodes_json = JSON.cd(json, %w(nodes))
-      @typed_node_props.each_with_index do |type, props|
-        props.each_with_index do |name, count|
+      @typed_node_props.each_pair do |type, props|
+        props.each_pair do |name, count|
           JSON.cd(nodes_json, [type, 'properties', name])['count'] = count.to_json
         end
       end
 
       edges_json = JSON.cd(json, %w(edges))
-      @typed_edges.each_with_index do |type, count|
+      @typed_edges.each_pair do |type, count|
         JSON.cd(edges_json, [type])['count'] = count.to_json
       end
 
       edges_json = JSON.cd(json, %w(edges))
-      @typed_edge_props.each_with_index do |type, props|
-        props.each_with_index do |name, count|
+      @typed_edge_props.each_pair do |type, props|
+        props.each_pair do |name, count|
           JSON.cd(edges_json, [type, 'properties', name])['count'] = count.to_json
         end
       end

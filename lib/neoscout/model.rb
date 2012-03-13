@@ -2,7 +2,7 @@ require 'set'
 
 module NeoScout
 
-  class Iterator
+  class ElementIterator
     def iter_nodes(args) ; raise NotImplentedError end
     def iter_edges(args) ; raise NotImplentedError end
   end
@@ -39,7 +39,7 @@ module NeoScout
 
     def count_node(type, ok)
       @all_nodes.incr(ok)
-      @typed_nodes.incr(ok)
+      @typed_nodes[type].incr(ok)
     end
 
     def count_node_prop(type, prop, ok)
@@ -48,11 +48,22 @@ module NeoScout
 
     def count_edge(type, ok)
       @all_edges.incr(ok)
-      @typed_edges.incr(ok)
+      @typed_edges[type].incr(ok)
     end
 
     def count_edge_prop(type, prop, ok)
       @typed_edge_props[type][prop].incr(ok)
+    end
+
+    def to_s
+      {
+        'all_nodes' => @all_nodes.to_s,
+        'all_edges' => @all_edges.to_s,
+        'typed_nodes' => @typed_nodes.to_s,
+        'typed_edges' => @typed_edges.to_s,
+        'typed_node_props' => @typed_node_props.to_s,
+        'typed_edge_props' => @typed_edge_props.to_s,
+      }
     end
 
   end
@@ -65,6 +76,26 @@ module NeoScout
       @node_props = HashWithDefault.new { |type| ConstrainedSet.new { |o| o.kind_of? Constraints::PropConstraint } }
       @edge_props = HashWithDefault.new { |type| ConstrainedSet.new { |o| o.kind_of? Constraints::PropConstraint } }
     end
+
+    def new_node_prop_constr(args={})
+      Constraints::PropConstraint.new args
+    end
+
+    def new_edge_prop_constr(args={})
+      Constraints::PropConstraint.new args
+    end
+
+    def new_card_constr(args={})
+      Constraints::CardConstraint.new args
+    end
+
+    def to_s
+      {
+          :node_props => @node_props.to_s,
+          :edge_props => @edge_props.to_s
+      }.to_s
+    end
+
   end
 
 end

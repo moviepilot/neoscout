@@ -62,9 +62,23 @@ module NeoScout
       @elem_test.call(elem)
     end
 
-    def <<(elem)
+    def add(elem)
       raise ArgumentError unless valid_elem?(elem)
       super elem
+    end
+
+    def to_s
+      first  = true
+      result = "#<NeoScout::ConstrainedSet: ["
+      each { |elem|
+        if first
+          result <<= "#{elem.to_s}"
+          first    = false
+        else
+          result <<= ", #{elem.to_s}"
+        end
+      }
+      result <<= "]>"
     end
 
   end
@@ -80,8 +94,24 @@ module NeoScout
       @default.call(key)
     end
 
+    def [](key)
+      if has_key?(key) then super(key) else self[key]=default(key) end
+    end
+
     def lookup(key, default_value = nil)
-      if has_key?(key) then self[key] else default_value end
+      if has_key?(key) then super(key) else self[key]=default_value end
+    end
+
+    def map_values(&blk)
+      new_hash = {}
+      each_pair do |k,v|
+        new_hash[k] = blk.call(v)
+      end
+      new_hash
+    end
+
+    def to_s
+      (self.map_values { |v| v.to_s }).to_s
     end
 
   end
@@ -95,5 +125,7 @@ module NeoScout
       end
       current
     end
+
   end
+
 end
