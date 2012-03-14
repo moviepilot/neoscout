@@ -1,0 +1,15 @@
+* Version 0.1
+* Documentation
+** overview
+** schema spec
+** output spec
+** standalone runner
+** rough code layout / how to extend
+* Features
+** type testing mechanism
+** cardconstraints if ever
+** more precise schema input
+** visualization
+* Integration and (alongside) testing
+** put into sheldon
+** limit number of queries / share results(?)
