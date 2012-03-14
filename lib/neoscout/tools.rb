@@ -2,6 +2,10 @@ module NeoScout
 
   class Counter
 
+    def self.multi(*list)
+      HashWithDefault.multi(*list) { |key| Counter.new }
+    end
+
     def initialize
       reset
     end
@@ -71,6 +75,17 @@ module NeoScout
 
   class HashWithDefault < Hash
 
+    def self.multi(*list, &blk)
+      list.shift
+      if list.empty?
+        HashWithDefault.new(&blk)
+      else
+        HashWithDefault.new { |key|
+          HashWithDefault.multi(*list, &blk)
+        }
+      end
+    end
+
     def initialize(&blk)
       super
       @default = blk
@@ -86,6 +101,18 @@ module NeoScout
 
     def lookup(key, default_value = nil)
       if has_key?(key) then self[key] else self[key]=default_value end
+    end
+
+    def map_value(&blk)
+      new_hash = {}
+      each_pair do |k,v|
+        new_hash[k] = if v.kind_of? HashWithDefault then
+                        v.map_value(&blk)
+                      else
+                        blk.call(v)
+                      end
+      end
+      new_hash
     end
 
   end
