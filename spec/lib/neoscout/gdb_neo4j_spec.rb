@@ -36,6 +36,7 @@ module NeoScout
           @user_d = ::Neo4j::Node::new type: 'users', name: 'Diderot'
           @user_e = ::Neo4j::Node::new type: 'users', name: 'Ephraim'
           @user_f = ::Neo4j::Node::new type: 'users', name: 'Francois'
+          @user_g = ::Neo4j::Node::new type: 'users'
 
           @challenge1 = ::Neo4j::Node.new type: 'challenges', descr: 'Eat fish on friday'
 
@@ -44,6 +45,7 @@ module NeoScout
           @user_a.incoming(:fugleman) << @challenge1
           @user_d.incoming(:fugleman) << @challenge1
           @user_e.outgoing(:spectator) << @challenge1
+          @user_e.outgoing(:spectator) << @user_g
         end
 
         @storage_path = ::Neo4j.db.storage_path

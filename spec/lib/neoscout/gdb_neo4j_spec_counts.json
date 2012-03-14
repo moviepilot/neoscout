@@ -3,24 +3,25 @@
         "properties":{
             "type":{
                 "relevant":true,
-                "counts":[6, 0, 6]
+                "counts":[7, 0, 7]
             },
             "name":{
                 "relevant":true,
-                "counts":[6, 0, 6]
+                "counts":[7, 0, 7]
             },
             "age":{
                 "counts":[0, 1, 1]
             }
         },
-        "counts":[5, 1, 6],
+        "counts":[6, 1, 7],
         "src_stats":{
             "challenger":[1, 0, 1],
-            "spectator":[1, 0, 1]
+            "spectator":[1, 1, 2]
         },
         "dst_stats":{
             "challengee":[1, 0, 1],
-            "fugleman":[2, 0, 2]
+            "fugleman":[2, 0, 2],
+            "spectator":[0, 1, 1]
         }
     },
     "challenges":{
@@ -49,11 +50,10 @@
         "counts":[0, 0, 0]
     }
 }, "connections":{
-    "__NOTYPE__":{
-        "properties":{},
-        "counts":[0, 0, 0]
-    },
     "challenger":{
+        "sources":["users"],
+        "targets":["challenges"],
+        "properties":{},
         "counts":[1, 0, 1],
         "src_stats":{
             "users":{
@@ -66,7 +66,30 @@
             }
         }
     },
+    "spectator":{
+        "sources":["users"],
+        "targets":["challenges"],
+        "properties":{},
+        "counts":[1, 1, 2],
+        "src_stats":{
+            "users":{
+                "challenges":[1, 0, 1],
+                "users":[0, 1, 1]
+            }
+        },
+        "dst_stats":{
+            "challenges":{
+                "users":[1, 0, 1]
+            },
+            "users":{
+                "users":[0, 1, 1]
+            }
+        }
+    },
     "challengee":{
+        "targets":["users"],
+        "sources":["challenges"],
+        "properties":{},
         "counts":[1, 0, 1],
         "src_stats":{
             "challenges":{
@@ -80,6 +103,9 @@
         }
     },
     "fugleman":{
+        "targets":["users"],
+        "sources":["challenges"],
+        "properties":{},
         "counts":[2, 0, 2],
         "src_stats":{
             "challenges":{
@@ -92,20 +118,11 @@
             }
         }
     },
-    "spectator":{
-        "counts":[1, 0, 1],
-        "src_stats":{
-            "users":{
-                "challenges":[1, 0, 1]
-            }
-        },
-        "dst_stats":{
-            "challenges":{
-                "users":[1, 0, 1]
-            }
-        }
+    "__NOTYPE__":{
+        "properties":{},
+        "counts":[0, 0, 0]
     }
 }, "all":{
-    "node_counts":[6, 1, 7],
-    "connection_counts":[5, 0, 5]
+    "node_counts":[7, 1, 8],
+    "connection_counts":[5, 1, 6]
 }}

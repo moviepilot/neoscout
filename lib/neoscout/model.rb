@@ -66,7 +66,7 @@ module NeoScout
       @typed_edge_props[type][prop].incr(ok)
     end
 
-    def count_link_stats(src_type, dst_type, edge_type, ok)
+    def count_link_stats(edge_type, src_type, dst_type, ok)
       # puts "#{src_type} -- #{edge_type} -- #{dst_type} #{if ok then "CHECK" else "FAIL" end}"
       @node_link_src_stats[src_type][edge_type].incr(ok)
       @node_link_dst_stats[dst_type][edge_type].incr(ok)
@@ -79,10 +79,12 @@ module NeoScout
   class Verifier
     attr_reader :node_props
     attr_reader :edge_props
+    attr_reader :allowed_edges
 
     def initialize
       @node_props = HashWithDefault.new { |type| ConstrainedSet.new { |o| o.kind_of? Constraints::PropConstraint } }
       @edge_props = HashWithDefault.new { |type| ConstrainedSet.new { |o| o.kind_of? Constraints::PropConstraint } }
+      @allowed_edges = HashWithDefault.multi(:edge_type, :src_type) { |v| Set.new }
     end
 
     def new_node_prop_constr(args={})
@@ -97,6 +99,21 @@ module NeoScout
       Constraints::CardConstraint.new args
     end
 
+    def add_valid_edge(edge_type, src_type, dst_type)
+      @allowed_edges[edge_type][src_type] << dst_type
+    end
+
+    def add_valid_edge_sets(edge_type, src_types, dst_types)
+      src_types.each do |src_type|
+        dst_types.each do |dst_type|
+          add_valid_edge edge_type, src_type, dst_type
+        end
+      end
+    end
+
+    def allowed_edge?(edge_type, src_type, dst_type)
+      allowed_edges[edge_type][src_type].member?(dst_type)
+    end
   end
 
 end

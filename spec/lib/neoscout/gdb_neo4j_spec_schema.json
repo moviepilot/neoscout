@@ -20,5 +20,23 @@
                 }
             }
         }
+    },
+    "connections":{
+        "challenger":{
+            "sources":["users"],
+            "targets":["challenges"]
+        },
+        "spectator":{
+            "sources":["users"],
+            "targets":["challenges"]
+        },
+        "challengee":{
+            "targets":["users"],
+            "sources":["challenges"]
+        },
+        "fugleman":{
+            "targets":["users"],
+            "sources":["challenges"]
+        }
     }
 }

@@ -66,10 +66,13 @@ module NeoScout
     end
 
     def process_edge(counts, edge_type, edge)
-      edge_ok = true
-
       edge_props = Set.new(edge.props.keys)
       edge_props.delete('_neo_id')
+
+      src_type = @typer.node_type(edge.start_node)
+      dst_type = @typer.node_type(edge.end_node)
+
+      edge_ok = @verifier.allowed_edge?(edge_type, src_type, dst_type)
 
       @verifier.edge_props[edge_type].each do |constr|
         prop_ok   = constr.satisfied_by?(edge)
@@ -87,9 +90,7 @@ module NeoScout
       end
 
       # Finally count edge statistics
-      src_type = @typer.node_type(edge.start_node)
-      dst_type = @typer.node_type(edge.end_node)
-      counts.count_link_stats(src_type, dst_type, edge_type, edge_ok)
+      counts.count_link_stats(edge_type, src_type, dst_type, edge_ok)
 
       edge_ok
     end

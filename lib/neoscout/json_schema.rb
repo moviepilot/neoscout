@@ -30,6 +30,10 @@ module NeoScout
           prop_set    = self.edge_props[type_name]
           prop_set << prop_constr
         end
+
+        sources_json = if type_json.has_key?('sources') then type_json['sources'] else [] end
+        targets_json = if type_json.has_key?('targets') then type_json['targets'] else [] end
+        add_valid_edge_sets type_name, sources_json, targets_json
       end
     end
 
