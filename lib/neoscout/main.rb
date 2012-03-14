@@ -12,7 +12,20 @@ module NeoScout
     ::JSON.parse(HTTParty.get(url))
   end
 
+  def self.init_db(db)
+    db.match(/(neo4j:)(.*)/) do |m|
+      Neo4j.config[:storage_path] = m[2] unless (m[2].length == 0)
+      return lambda { ::NeoScout::GDB_Neo4j::Scout.new }
+    end
+
+    raise ArgumentError("Unsupported database type")
+  end
+
+  # TODO turn into class
   def self.main
+
+    ### Parsing options
+
     options = {}
     optparse = OptionParser.new do |opts|
       opts.banner = "Usage: --db <neo4j:path> --schema <url> [--port <port>]"
@@ -35,8 +48,15 @@ module NeoScout
     end
     optparse.parse!
 
-    puts options.to_s
+    puts "neoscout loaded with options: #{options.to_s}"
 
+    ### Load schema at least once to know that we're safe
+    load_schema(options[:schema])
+
+    ### Load database
+    scout_maker = init_db(options[:db])
+
+    ### Run sinatra
     require 'sinatra'
 
     set :port, options[:port] if options[:port]
@@ -53,6 +73,20 @@ module NeoScout
     get '/schema' do
       content_type :json
       NeoScout.load_schema(options[:schema]).to_json
+    end
+
+    get '/verify' do
+      content_type :json
+
+      schema = NeoScout.load_schema(options[:schema])
+      ### Without further ado, we assume all there is is neo4j
+      scout  = scout_maker.call()
+      scout.verifier.init_from_json schema
+      counts = scout.new_counts
+      scout.count_edges counts: counts
+      scout.count_nodes counts: counts
+      counts.add_to_json schema
+      schema.to_json
     end
 
   end

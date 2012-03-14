@@ -3,22 +3,22 @@
         "users":{
             "properties":{
                 "type":{
-                    "relevant":true
-                },
-                "name":{
-                    "relevant":true
-                }
-            }
-        },
-        "challenges":{
-            "properties":{
-                "type":{
-                    "relevant":true
-                },
-                "descr":{
-                    "relevant":false
-                }
-            }
-        }
-    }
+"relevant":true
+},
+"name":{
+"relevant":true
+}
+}
+},
+"challenges":{
+"properties":{
+"type":{
+"relevant":true
+},
+"descr":{
+"relevant":false
+}
+}
+}
+}
 }

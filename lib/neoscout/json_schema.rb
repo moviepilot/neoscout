@@ -17,9 +17,7 @@ module NeoScout
 
     def init_from_json(json)
       JSON.cd(json, %w(nodes)).each_pair do |type_name, type_json|
-        puts type_name, type_json
         JSON.cd(type_json, %w(properties)).each_pair do |prop_name, prop_json|
-          puts prop_name, prop_json
           prop_constr = new_node_prop_constr name: prop_name, opt: !prop_json['relevant']
           prop_set    = self.node_props[type_name]
           prop_set << prop_constr

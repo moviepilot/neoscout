@@ -51,9 +51,9 @@ module NeoScout
       end
 
       after(:each) do
-        ::Neo4j.db.shutdown
+        ::Neo4j.shutdown
         puts "Deleting '#{@storage_path}'..."
-        FileUtils.rm_rf @storage_path
+        FileUtils.rm_rf @storage_path unless ENV['KEEP_TMP_NEO']
       end
 
       it 'should verify properties correctly' do
