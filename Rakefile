@@ -1,7 +1,5 @@
-require 'bundler'
-Bundler.require
+require 'bundler/gem_tasks'
 
-require 'rake'
 require 'rdoc/task'
 require 'rspec'
 require 'rspec/core/rake_task'
@@ -28,4 +26,3 @@ task :console do
 end
 
 task :irb => :console
-task :default  => :spec

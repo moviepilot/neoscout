@@ -1,6 +1,5 @@
 require 'spec/spec_helper'
-require 'neoscout/neoscout'
-require 'neoscout/json_schema'
+require 'neoscout'
 
 module NeoScout
 

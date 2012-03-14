@@ -1,5 +1,5 @@
 require 'spec/spec_helper'
-require 'neoscout/neoscout'
+require 'neoscout'
 
 module NeoScout
   module Constraints

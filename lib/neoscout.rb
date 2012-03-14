@@ -1,7 +1,7 @@
-require 'version'
-
 require 'json'
 require 'neo4j'
+
+require 'neoscout/version'
 
 require 'neoscout/tools.rb'
 require 'neoscout/constraints.rb'
