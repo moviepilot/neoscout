@@ -10,6 +10,9 @@ module NeoScout
   class Typer
     def node_type(node) ; raise NotImplementedError end
     def edge_type(edge) ; raise NotImplementedError end
+
+    def checked_node_type?(node_type) ; raise NotImplementedError end
+    def checked_edge_type?(edge_type) ; raise NotImplementedError end
   end
 
   class Counts
@@ -111,8 +114,16 @@ module NeoScout
       end
     end
 
+    def checked_node_type?(node_type)
+      ! @node_props[node_type].empty?
+    end
+
+    def checked_edge_type?(node_type)
+      ! @node_props[node_type].empty?
+    end
+
     def allowed_edge?(edge_type, src_type, dst_type)
-      allowed_edges[edge_type][src_type].member?(dst_type)
+      allowed_edges[edge_type].empty? || allowed_edges[edge_type][src_type].member?(dst_type)
     end
   end
 

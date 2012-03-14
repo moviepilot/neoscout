@@ -12,6 +12,14 @@ module NeoScout
       @iterator = ElementIterator.new unless @iterator
     end
 
+    def checked_node_type?(node_type)
+      @typer.checked_node_type?(node_type) && @verifier.checked_node_type?(node_type)
+    end
+
+    def checked_edge_type?(edge_type)
+      @typer.checked_edge_type?(edge_type) && @verifier.checked_edge_type?(edge_type)
+    end
+
 
     def new_counts
       NeoScout::Counts.new
@@ -57,7 +65,7 @@ module NeoScout
       # Process remaining properties in this node as erroneously missing in the schema
       # unless the node is untyped
       node_props.each do |prop_name|
-        prop_ok   = node_type == typer.nil_type
+        prop_ok   = ! checked_node_type?(node_type)
         counts.count_node_prop(node_type, prop_name, prop_ok)
         node_ok &&= prop_ok
       end
@@ -84,7 +92,7 @@ module NeoScout
       # Process remaining properties in this node as erroneously missing in the schema
       # unless the edge is untyped
       edge_props.each do |prop_name|
-        prop_ok   = edge_type == typer.nil_type
+        prop_ok   = ! checked_edge_type?(edge_type)
         counts.count_edge_prop(edge_type, prop_name, prop_ok)
         edge_ok &&= prop_ok
       end

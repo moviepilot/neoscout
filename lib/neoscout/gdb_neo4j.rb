@@ -40,6 +40,8 @@ module NeoScout
         if type then type.to_s else @nil_type end
       end
 
+      def checked_node_type?(node_type) ; node_type != self.nil_type end
+      def checked_edge_type?(edge_type) ; edge_type != self.nil_type end
     end
 
     class ElementIterator < NeoScout::ElementIterator
