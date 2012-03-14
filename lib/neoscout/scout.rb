@@ -18,7 +18,7 @@ module NeoScout
     end
 
     def count_nodes(args)
-      counts = args[:counts]
+      counts = prep_counts(args[:counts])
       @iterator.iter_nodes(args) do |node|
         node_type = @typer.node_type(node)
         node_ok   = process_node(counts, node_type, node)
@@ -28,7 +28,7 @@ module NeoScout
     end
 
     def count_edges(args)
-      counts = args[:counts]
+      counts = prep_counts(args[:counts])
       @iterator.iter_edges(args) do |edge|
         edge_type = @typer.edge_type(edge)
         edge_ok   = process_edge(counts, edge_type, edge)
@@ -37,14 +37,28 @@ module NeoScout
       counts
     end
 
+    def prep_counts(counts) ; counts end
+
     protected
 
     def process_node(counts, node_type, node)
-      node_ok = true
+      node_ok    = true
+
+      node_props = Set.new(node.props.keys)
+      node_props.delete('_neo_id')
 
       @verifier.node_props[node_type].each do |constr|
         prop_ok   = constr.satisfied_by?(node)
         counts.count_node_prop(node_type, constr.name, prop_ok)
+        node_props.delete(constr.name)
+        node_ok &&= prop_ok
+      end
+
+      # Process remaining properties in this node as erroneously missing in the schema
+      # unless the node is untyped
+      node_props.each do |prop_name|
+        prop_ok   = node_type == typer.nil_type
+        counts.count_node_prop(node_type, prop_name, prop_ok)
         node_ok &&= prop_ok
       end
 
@@ -54,14 +68,27 @@ module NeoScout
     def process_edge(counts, edge_type, edge)
       edge_ok = true
 
+      edge_props = Set.new(edge.props.keys)
+      edge_props.delete('_neo_id')
+
       @verifier.edge_props[edge_type].each do |constr|
         prop_ok   = constr.satisfied_by?(edge)
         counts.count_edge_prop(edge_type, constr.name, prop_ok)
+        edge_props.delete(constr.name)
+        edge_ok &&= prop_ok
+      end
+
+      # Process remaining properties in this node as erroneously missing in the schema
+      # unless the edge is untyped
+      edge_props.each do |prop_name|
+        prop_ok   = edge_type == typer.nil_type
+        counts.count_edge_prop(edge_type, prop_name, prop_ok)
         edge_ok &&= prop_ok
       end
 
       edge_ok
     end
+
   end
 
 end

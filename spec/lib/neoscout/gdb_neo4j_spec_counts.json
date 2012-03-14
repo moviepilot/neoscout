@@ -8,9 +8,12 @@
             "name":{
                 "relevant":true,
                 "counts":[6, 0, 6]
+            },
+            "age":{
+                "counts":[0, 1, 1]
             }
         },
-        "counts":[6, 0, 6]
+        "counts":[5, 1, 6]
     },
     "challenges":{
         "properties":{
@@ -26,15 +29,15 @@
         "counts":[1, 0, 1]
     },
     "__NOTYPE__":{
-        "properties": {}
+        "properties":{},
+        "counts":[0, 0, 0]
     }
 }, "edges":{
-   "__NOTYPE__":{
-       "properties": {},
-       "counts": [5, 0, 5]
-   }
-},
-"all":{
-    "node_counts":[7, 0, 7],
+    "__NOTYPE__":{
+        "properties":{},
+        "counts":[5, 0, 5]
+    }
+}, "all":{
+    "node_counts":[6, 1, 7],
     "edge_counts":[5, 0, 5]
 }}

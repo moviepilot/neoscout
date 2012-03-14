@@ -1,5 +1,6 @@
 require 'json'
 require 'neo4j'
+require 'set'
 
 require 'neoscout/version'
 

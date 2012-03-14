@@ -31,7 +31,7 @@ module NeoScout
 
         ::Neo4j::Transaction.run do
           @user_a = ::Neo4j::Node::new type: 'users', name: 'Alfons'
-          @user_b = ::Neo4j::Node::new type: 'users', name: 'Bernhard'
+          @user_b = ::Neo4j::Node::new type: 'users', name: 'Bernhard', age: '33'
           @user_c = ::Neo4j::Node::new type: 'users', name: 'Claudio'
           @user_d = ::Neo4j::Node::new type: 'users', name: 'Diderot'
           @user_e = ::Neo4j::Node::new type: 'users', name: 'Ephraim'

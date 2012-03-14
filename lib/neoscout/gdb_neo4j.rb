@@ -78,6 +78,7 @@ module NeoScout
 
       def init_from_json(json)
         super(json)
+        # Ensure __NOTYPE__entries always have a properties hash
         JSON.cd(json, ['nodes', @typer.nil_type, 'properties'])
         JSON.cd(json, ['edges', @typer.nil_type, 'properties'])
       end
@@ -92,6 +93,12 @@ module NeoScout
         super args
       end
 
+      def prep_counts(counts)
+        # Ensure __NOTYPE__entries always have a counts array
+        counts.typed_nodes[typer.nil_type]
+        counts.typed_edges[typer.nil_type]
+        counts
+      end
     end
 
   end
