@@ -25,4 +25,5 @@ task :console do
   IRB.start
 end
 
+task :test => :spec
 task :irb => :console
