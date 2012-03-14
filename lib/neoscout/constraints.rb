@@ -3,6 +3,9 @@ module NeoScout
   module Constraints
 
     class Constraint
+      def satisfied_by_node?(node) ; satisfied_by?(node) end
+      def satisfied_by_edge?(edge) ; satisfied_by?(edge) end
+
       def satisfied_by?(obj) ; raise NotImplementedError end
     end
 

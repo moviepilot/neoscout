@@ -7,20 +7,20 @@
             },
             "name":{
                 "relevant":true,
-                "counts":[7, 0, 7]
+                "counts":[6, 1, 7]
             },
             "age":{
                 "counts":[0, 1, 1]
             }
         },
-        "counts":[6, 1, 7],
+        "counts":[5, 2, 7],
         "src_stats":{
             "challenger":[1, 0, 1],
             "spectator":[1, 1, 2]
         },
         "dst_stats":{
             "challengee":[1, 0, 1],
-            "fugleman":[2, 0, 2],
+            "fugleman":[1, 1, 2],
             "spectator":[0, 1, 1]
         }
     },
@@ -38,7 +38,7 @@
         "counts":[1, 0, 1],
         "src_stats":{
             "challengee":[1, 0, 1],
-            "fugleman":[2, 0, 2]
+            "fugleman":[1, 1, 2]
         },
         "dst_stats":{
             "challenger":[1, 0, 1],
@@ -103,18 +103,23 @@
         }
     },
     "fugleman":{
+        "properties":{
+            "accepted":{
+                "relevant":true,
+                "counts":[1, 1, 2]
+            }
+        },
         "targets":["users"],
         "sources":["challenges"],
-        "properties":{},
-        "counts":[2, 0, 2],
+        "counts":[1, 1, 2],
         "src_stats":{
             "challenges":{
-                "users":[2, 0, 2]
+                "users":[1, 1, 2]
             }
         },
         "dst_stats":{
             "users":{
-                "challenges":[2, 0, 2]
+                "challenges":[1, 1, 2]
             }
         }
     },
@@ -123,6 +128,6 @@
         "counts":[0, 0, 0]
     }
 }, "all":{
-    "node_counts":[7, 1, 8],
-    "connection_counts":[5, 1, 6]
+    "node_counts":[6, 2, 8],
+    "connection_counts":[4, 2, 6]
 }}

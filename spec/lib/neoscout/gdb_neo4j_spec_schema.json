@@ -35,6 +35,9 @@
             "sources":["challenges"]
         },
         "fugleman":{
+            "properties":{
+                "accepted": {"relevant": true}
+            },
             "targets":["users"],
             "sources":["challenges"]
         }

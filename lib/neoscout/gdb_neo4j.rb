@@ -7,11 +7,7 @@ module NeoScout
       class PropConstraint < NeoScout::Constraints::PropConstraint
 
         def satisfied_by?(obj)
-          if obj.property?(@name)
-            satisfies_type?(@type, obj[@name])
-          else
-            ! self.opt
-          end
+          (obj.property?(@name) && satisfies_type?(@type, obj[@name])) || self.opt
         end
 
         def satisfies_type?(type, value)

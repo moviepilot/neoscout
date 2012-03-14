@@ -30,20 +30,21 @@ module NeoScout
         @schema_counts = load_counts
 
         ::Neo4j::Transaction.run do
-          @user_a = ::Neo4j::Node::new type: 'users', name: 'Alfons'
-          @user_b = ::Neo4j::Node::new type: 'users', name: 'Bernhard', age: '33'
-          @user_c = ::Neo4j::Node::new type: 'users', name: 'Claudio'
-          @user_d = ::Neo4j::Node::new type: 'users', name: 'Diderot'
-          @user_e = ::Neo4j::Node::new type: 'users', name: 'Ephraim'
-          @user_f = ::Neo4j::Node::new type: 'users', name: 'Francois'
-          @user_g = ::Neo4j::Node::new type: 'users'
+          @user_a = ::Neo4j::Node.new type: 'users', name: 'Alfons'
+          @user_b = ::Neo4j::Node.new type: 'users', name: 'Bernhard', age: '33'
+          @user_c = ::Neo4j::Node.new type: 'users', name: 'Claudio'
+          @user_d = ::Neo4j::Node.new type: 'users', name: 'Diderot'
+          @user_e = ::Neo4j::Node.new type: 'users', name: 'Ephraim'
+          @user_f = ::Neo4j::Node.new type: 'users', name: 'Francois'
+          @user_g = ::Neo4j::Node.new type: 'users'
 
           @challenge1 = ::Neo4j::Node.new type: 'challenges', descr: 'Eat fish on friday'
 
           @user_a.outgoing(:challenger) << @challenge1
           @user_b.incoming(:challengee) << @challenge1
-          @user_a.incoming(:fugleman) << @challenge1
-          @user_d.incoming(:fugleman) << @challenge1
+          @rel0 = ::Neo4j::Relationship.new(:fugleman, @challenge1, @user_a)
+          @rel0['accepted'] = true
+          @rel1 = ::Neo4j::Relationship.new(:fugleman, @challenge1, @user_b)
           @user_e.outgoing(:spectator) << @challenge1
           @user_e.outgoing(:spectator) << @user_g
         end
