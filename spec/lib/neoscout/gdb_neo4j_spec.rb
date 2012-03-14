@@ -60,8 +60,8 @@ module NeoScout
         @it = ::NeoScout::GDB_Neo4j::Scout.new
         @it.verifier.init_from_json @schema_json
         @counts = @it.new_counts
-        @it.count_nodes counts: @counts
         @it.count_edges counts: @counts
+        @it.count_nodes counts: @counts
         @counts.add_to_json @schema_json
         # puts @schema_json.to_json
         @schema_json.should be == @schema_counts

@@ -1,0 +1,12 @@
+#!/usr/bin/env ruby --1.9
+# -*- mode: ruby -*-
+
+require 'rubygems'
+
+# Set up gems listed in the Gemfile to deal with rubygems-bundle-nastyness
+ENV['BUNDLE_GEMFILE'] = File.expand_path('../../Gemfile', __FILE__)
+require 'bundler/setup'
+
+# Patch in actual gem path. Yay.
+$:.push File.expand_path("../../lib", __FILE__)
+require 'neoscout'

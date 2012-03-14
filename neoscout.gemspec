@@ -17,8 +17,8 @@ Gem::Specification.new do |s|
   s.executables   = `git ls-files -- bin/*`.split("\n").map{ |f| File.basename(f) }
   s.require_paths = ["lib"]
 
-  s.bindir      = 'bin'
-  s.executables = `git ls-files -- bin/*`.split("\n").map{ |f| File.basename(f) }
+  s.bindir      = 'script'
+  s.executables = `git ls-files -- script/*`.split("\n").map{ |f| File.basename(f) }
   s.default_executable = 'neoscout'
   s.executables = ['neoscout']
   s.licenses = ['PUBLIC DOMAIN WITHOUT ANY WARRANTY']
