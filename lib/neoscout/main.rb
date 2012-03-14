@@ -67,7 +67,7 @@ module NeoScout
     set :logging, true
     set :dump_errors, true
     set :lock, true # -- really?
-    set :root, File.expand_path("../../lib", __FILE__)
+    set :root, File.expand_path("../../root", __FILE__)
     set :run, true
 #    set :public_folder
 
@@ -80,7 +80,6 @@ module NeoScout
       content_type :json
 
       schema = NeoScout.load_schema(options[:schema])
-      ### Without further ado, we assume all there is is neo4j
       scout  = scout_maker.call()
       scout.verifier.init_from_json schema
       counts = scout.new_counts
