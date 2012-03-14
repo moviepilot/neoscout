@@ -22,6 +22,7 @@ module NeoScout
     end
 
     class Typer < NeoScout::Typer
+
       attr_writer :type_attr
       attr_writer :nil_type
 
@@ -62,6 +63,10 @@ module NeoScout
     end
 
     class Verifier < NeoScout::Verifier
+      def initialize(typer)
+        @typer = typer
+      end
+
       def new_node_prop_constr(args={})
         Constraints::PropConstraint.new args
       end
@@ -69,13 +74,19 @@ module NeoScout
       def new_edge_prop_constr(args={})
         Constraints::PropConstraint.new args
       end
+
+      #def init_from_json(json)
+      #  super.init_from_json(json)
+      #  #JSON.cd(json, ['nodes', 'properties', @typer.nil_type])
+      #  #JSON.cd(json, ['edges', 'properties', @typer.nil_type])
+      #end
     end
 
     class Scout < NeoScout::Scout
 
       def initialize(args={})
-        args[:verifier] = Verifier.new unless args[:verifier]
         args[:typer] = Typer.new unless args[:typer]
+        args[:verifier] = Verifier.new(args[:typer]) unless args[:verifier]
         args[:iterator] = ElementIterator.new unless args[:iterator]
         super args
       end

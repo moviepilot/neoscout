@@ -58,6 +58,7 @@ module NeoScout
 
       it 'should verify properties correctly' do
         @it = ::NeoScout::GDB_Neo4j::Scout.new
+        puts @schema_json
         @it.verifier.init_from_json @schema_json
         @counts = @it.new_counts
         @it.count_edges counts: @counts
