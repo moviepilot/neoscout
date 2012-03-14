@@ -2,10 +2,6 @@ module NeoScout
 
   class Counter
 
-    def self.multi(*list)
-      HashWithDefault.multi(*list) { |key| Counter.new }
-    end
-
     def initialize
       reset
     end
@@ -73,21 +69,10 @@ module NeoScout
 
   end
 
-  class HashWithDefault < Hash
+  module HashDefaultsMixin
 
-    def self.multi(*list, &blk)
-      list.shift
-      if list.empty?
-        HashWithDefault.new(&blk)
-      else
-        HashWithDefault.new { |key|
-          HashWithDefault.multi(*list, &blk)
-        }
-      end
-    end
-
-    def initialize(&blk)
-      super
+    def initialize(*args, &blk)
+      super *args
       @default = blk
     end
 
@@ -103,16 +88,49 @@ module NeoScout
       if has_key?(key) then self[key] else self[key]=default_value end
     end
 
-    def map_value(&blk)
-      new_hash = {}
-      each_pair do |k,v|
-        new_hash[k] = if v.kind_of? HashWithDefault then
-                        v.map_value(&blk)
-                      else
-                        blk.call(v)
-                      end
+    def key_descr
+      :key
+    end
+
+
+    def self.included(base)
+
+      # defines map_value for mixin target baseclass instances and any subclass instances
+      base.class_exec(base) do |base_class|
+        define_method(:map_value) do |&blk|
+          new_hash = {}
+          each_pair do |k,v|
+            new_hash[k] = if v.kind_of? base_class then v.map_value(&blk) else blk.call(v) end
+          end
+          new_hash
+        end
       end
-      new_hash
+
+      # defines new_multi_keyed on the mixin's target baseclass
+      # (subclasses the baseclass to override key_descr for instances)
+      def base.new_multi_keyed(*list, &blk)
+        new_class = Class.new(self)
+        (class << new_class ; self end).class_exec(list.shift) do |descr|
+          define_method(:key_descr) { || descr }
+        end
+        if list.empty?
+          then new_class.new(&blk)
+          else new_class.new { |key| self.new_multi_keyed(*list, &blk) } end
+      end
+
+    end
+  end
+
+  class HashWithDefault < Hash
+
+    include HashDefaultsMixin
+
+  end
+
+  class Counter
+
+    def self.new_multi_keyed(*list)
+      HashWithDefault.new_multi_keyed(*list) { |key| Counter.new }
     end
 
   end
@@ -122,11 +140,9 @@ module NeoScout
     def self.cd(json, args)
       current = json
       args.each do |k|
-        if current.has_key? k
-          current = current[k]
-        else
-          current = current[k] = {}
-        end
+        current = if current.has_key? k
+          then current[k]
+          else current[k] = {} end
       end
       current
     end

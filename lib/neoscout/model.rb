@@ -38,17 +38,17 @@ module NeoScout
       @all_nodes        = Counter.new
       @all_edges        = Counter.new
 
-      @typed_nodes      = Counter.multi :node_type
-      @typed_edges      = Counter.multi :edge_type
+      @typed_nodes      = Counter.new_multi_keyed :node_type
+      @typed_edges      = Counter.new_multi_keyed :edge_type
 
-      @typed_node_props = Counter.multi :node_type, :prop_constr
-      @typed_edge_props = Counter.multi :node_type, :prop_constr
+      @typed_node_props = Counter.new_multi_keyed :node_type, :prop_constr
+      @typed_edge_props = Counter.new_multi_keyed :node_type, :prop_constr
 
-      @node_link_src_stats = Counter.multi :src_type, :edge_type
-      @node_link_dst_stats = Counter.multi :dst_type, :edge_type
+      @node_link_src_stats = Counter.new_multi_keyed :src_type, :edge_type
+      @node_link_dst_stats = Counter.new_multi_keyed :dst_type, :edge_type
 
-      @edge_link_src_stats = Counter.multi :edge_type, :src_type, :dst_type
-      @edge_link_dst_stats = Counter.multi :edge_type, :dst_type, :src_type
+      @edge_link_src_stats = Counter.new_multi_keyed :edge_type, :src_type, :dst_type
+      @edge_link_dst_stats = Counter.new_multi_keyed :edge_type, :dst_type, :src_type
     end
 
     def count_node(type, ok)
@@ -87,7 +87,7 @@ module NeoScout
     def initialize
       @node_props = HashWithDefault.new { |type| ConstrainedSet.new { |o| o.kind_of? Constraints::PropConstraint } }
       @edge_props = HashWithDefault.new { |type| ConstrainedSet.new { |o| o.kind_of? Constraints::PropConstraint } }
-      @allowed_edges = HashWithDefault.multi(:edge_type, :src_type) { |v| Set.new }
+      @allowed_edges = HashWithDefault.new_multi_keyed(:edge_type, :src_type) { |v| Set.new }
     end
 
     def new_node_prop_constr(args={})

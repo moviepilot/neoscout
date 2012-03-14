@@ -4,9 +4,10 @@ require 'httparty'
 
 module NeoScout
 
-  def self.load_schema(url)
+  def self.load_schema(url, file_ok=false)
     url.match(/(file:\/\/)(.+)/) do |m|
-        return ::JSON.parse(IO::read(file=m[2]))
+      return ::JSON.parse(IO::read(file=m[2])) if file_ok
+      raise ArgumentError("No file url allowed")
     end
 
     ::JSON.parse(HTTParty.get(url))
@@ -26,7 +27,7 @@ module NeoScout
 
     ### Parsing options
 
-    options = {}
+    options  = {}
     optparse = OptionParser.new do |opts|
       opts.banner = "Usage: --db <neo4j:path> --schema <url> [--port <port>]"
       opts.on('-d', '--db DB', 'Path to database in the form neo4j:<path>)') do |db|
@@ -51,7 +52,7 @@ module NeoScout
     puts "neoscout loaded with options: #{options.to_s}"
 
     ### Load schema at least once to know that we're safe
-    load_schema(options[:schema])
+    load_schema(options[:schema], true)
 
     ### Load database
     scout_maker = init_db(options[:db])
@@ -72,7 +73,7 @@ module NeoScout
 
     get '/schema' do
       content_type :json
-      NeoScout.load_schema(options[:schema]).to_json
+      NeoScout.load_schema(options[:schema], true).to_json
     end
 
     get '/verify' do
