@@ -86,6 +86,11 @@ module NeoScout
         edge_ok &&= prop_ok
       end
 
+      # Finally count edge statistics
+      src_type = @typer.node_type(edge.start_node)
+      dst_type = @typer.node_type(edge.end_node)
+      counts.count_link_stats(src_type, dst_type, edge_type, edge_ok)
+
       edge_ok
     end
 

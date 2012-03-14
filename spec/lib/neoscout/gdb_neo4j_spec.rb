@@ -53,7 +53,7 @@ module NeoScout
       after(:each) do
         ::Neo4j.shutdown
         puts "Deleting '#{@storage_path}'..."
-        FileUtils.rm_rf @storage_path unless ENV['KEEP_TMP_NEO']
+        FileUtils.rm_rf @storage_path unless (ENV['NEOSCOUT_KEEP_DB']=='YES')
       end
 
       it 'should verify properties correctly' do
@@ -63,7 +63,9 @@ module NeoScout
         @it.count_edges counts: @counts
         @it.count_nodes counts: @counts
         @counts.add_to_json @schema_json
-        # puts @schema_json.to_json
+        puts '<<RESULT'
+        puts @schema_json.to_json
+        puts 'RESULT'
         @schema_json.should be == @schema_counts
       end
 

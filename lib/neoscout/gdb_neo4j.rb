@@ -36,7 +36,8 @@ module NeoScout
       end
 
       def edge_type(edge)
-        edge[@type_attr] || @nil_type
+        type = edge.rel_type
+        if type then type.to_s else @nil_type end
       end
 
     end
@@ -80,7 +81,7 @@ module NeoScout
         super(json)
         # Ensure __NOTYPE__entries always have a properties hash
         JSON.cd(json, ['nodes', @typer.nil_type, 'properties'])
-        JSON.cd(json, ['edges', @typer.nil_type, 'properties'])
+        JSON.cd(json, ['connections', @typer.nil_type, 'properties'])
       end
     end
 

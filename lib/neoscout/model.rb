@@ -22,6 +22,11 @@ module NeoScout
     attr_reader :typed_node_props
     attr_reader :typed_edge_props
 
+    attr_reader :node_link_src_stats
+    attr_reader :node_link_dst_stats
+    attr_reader :edge_link_src_stats
+    attr_reader :edge_link_dst_stats
+
     def initialize
       reset
     end
@@ -30,11 +35,17 @@ module NeoScout
       @all_nodes        = Counter.new
       @all_edges        = Counter.new
 
-      @typed_nodes      = HashWithDefault.new { |node_type| Counter.new }
-      @typed_edges      = HashWithDefault.new { |edge_type| Counter.new }
+      @typed_nodes      = Counter.multi :node_type
+      @typed_edges      = Counter.multi :edge_type
 
-      @typed_node_props = HashWithDefault.new { |node_type| HashWithDefault.new { |prop_constr| Counter.new } }
-      @typed_edge_props = HashWithDefault.new { |edge_type| HashWithDefault.new { |prop_constr| Counter.new } }
+      @typed_node_props = Counter.multi :node_type, :prop_constr
+      @typed_edge_props = Counter.multi :node_type, :prop_constr
+
+      @node_link_src_stats = Counter.multi :src_type, :edge_type
+      @node_link_dst_stats = Counter.multi :dst_type, :edge_type
+
+      @edge_link_src_stats = Counter.multi :edge_type, :src_type, :dst_type
+      @edge_link_dst_stats = Counter.multi :edge_type, :dst_type, :src_type
     end
 
     def count_node(type, ok)
@@ -55,15 +66,12 @@ module NeoScout
       @typed_edge_props[type][prop].incr(ok)
     end
 
-    def to_s
-      {
-        'all_nodes' => @all_nodes.to_s,
-        'all_edges' => @all_edges.to_s,
-        'typed_nodes' => @typed_nodes.to_s,
-        'typed_edges' => @typed_edges.to_s,
-        'typed_node_props' => @typed_node_props.to_s,
-        'typed_edge_props' => @typed_edge_props.to_s,
-      }
+    def count_link_stats(src_type, dst_type, edge_type, ok)
+      # puts "#{src_type} -- #{edge_type} -- #{dst_type} #{if ok then "CHECK" else "FAIL" end}"
+      @node_link_src_stats[src_type][edge_type].incr(ok)
+      @node_link_dst_stats[dst_type][edge_type].incr(ok)
+      @edge_link_src_stats[edge_type][src_type][dst_type].incr(ok)
+      @edge_link_dst_stats[edge_type][dst_type][src_type].incr(ok)
     end
 
   end
@@ -87,13 +95,6 @@ module NeoScout
 
     def new_card_constr(args={})
       Constraints::CardConstraint.new args
-    end
-
-    def to_s
-      {
-          :node_props => @node_props.to_s,
-          :edge_props => @edge_props.to_s
-      }.to_s
     end
 
   end

@@ -13,7 +13,15 @@
                 "counts":[0, 1, 1]
             }
         },
-        "counts":[5, 1, 6]
+        "counts":[5, 1, 6],
+        "src_stats":{
+            "challenger":[1, 0, 1],
+            "spectator":[1, 0, 1]
+        },
+        "dst_stats":{
+            "challengee":[1, 0, 1],
+            "fugleman":[2, 0, 2]
+        }
     },
     "challenges":{
         "properties":{
@@ -26,18 +34,78 @@
                 "counts":[1, 0, 1]
             }
         },
-        "counts":[1, 0, 1]
+        "counts":[1, 0, 1],
+        "src_stats":{
+            "challengee":[1, 0, 1],
+            "fugleman":[2, 0, 2]
+        },
+        "dst_stats":{
+            "challenger":[1, 0, 1],
+            "spectator":[1, 0, 1]
+        }
     },
     "__NOTYPE__":{
         "properties":{},
         "counts":[0, 0, 0]
     }
-}, "edges":{
+}, "connections":{
     "__NOTYPE__":{
         "properties":{},
-        "counts":[5, 0, 5]
+        "counts":[0, 0, 0]
+    },
+    "challenger":{
+        "counts":[1, 0, 1],
+        "src_stats":{
+            "users":{
+                "challenges":[1, 0, 1]
+            }
+        },
+        "dst_stats":{
+            "challenges":{
+                "users":[1, 0, 1]
+            }
+        }
+    },
+    "challengee":{
+        "counts":[1, 0, 1],
+        "src_stats":{
+            "challenges":{
+                "users":[1, 0, 1]
+            }
+        },
+        "dst_stats":{
+            "users":{
+                "challenges":[1, 0, 1]
+            }
+        }
+    },
+    "fugleman":{
+        "counts":[2, 0, 2],
+        "src_stats":{
+            "challenges":{
+                "users":[2, 0, 2]
+            }
+        },
+        "dst_stats":{
+            "users":{
+                "challenges":[2, 0, 2]
+            }
+        }
+    },
+    "spectator":{
+        "counts":[1, 0, 1],
+        "src_stats":{
+            "users":{
+                "challenges":[1, 0, 1]
+            }
+        },
+        "dst_stats":{
+            "challenges":{
+                "users":[1, 0, 1]
+            }
+        }
     }
 }, "all":{
     "node_counts":[6, 1, 7],
-    "edge_counts":[5, 0, 5]
+    "connection_counts":[5, 0, 5]
 }}
