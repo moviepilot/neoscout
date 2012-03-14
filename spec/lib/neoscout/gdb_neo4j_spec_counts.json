@@ -24,9 +24,15 @@
             }
         },
         "counts":[1, 0, 1]
+    },
+    "__NOTYPE__":{
+        "properties": {}
     }
 }, "edges":{
-   "__NOTYPE__":{"counts": [5, 0, 5]}
+   "__NOTYPE__":{
+       "properties": {},
+       "counts": [5, 0, 5]
+   }
 },
 "all":{
     "node_counts":[7, 0, 7],

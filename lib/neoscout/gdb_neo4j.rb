@@ -23,8 +23,8 @@ module NeoScout
 
     class Typer < NeoScout::Typer
 
-      attr_writer :type_attr
-      attr_writer :nil_type
+      attr_accessor :type_attr
+      attr_accessor :nil_type
 
       def initialize
         @type_attr = 'type'
@@ -46,7 +46,7 @@ module NeoScout
       def iter_nodes(args)
         glops = org.neo4j.tooling.GlobalGraphOperations.at(Neo4j.db.graph)
         iter  = glops.getAllNodes.iterator
-        while (iter.hasNext) do
+        while iter.hasNext do
           node = iter.next
           yield node.wrapper unless node.getId == 0
         end
@@ -55,7 +55,7 @@ module NeoScout
       def iter_edges(args)
         glops = org.neo4j.tooling.GlobalGraphOperations.at(Neo4j.db.graph)
         iter  = glops.getAllRelationships.iterator
-        while (iter.hasNext) do
+        while iter.hasNext do
           yield iter.next.wrapper
         end
       end
@@ -64,6 +64,7 @@ module NeoScout
 
     class Verifier < NeoScout::Verifier
       def initialize(typer)
+        super()
         @typer = typer
       end
 
@@ -75,11 +76,11 @@ module NeoScout
         Constraints::PropConstraint.new args
       end
 
-      #def init_from_json(json)
-      #  super.init_from_json(json)
-      #  #JSON.cd(json, ['nodes', 'properties', @typer.nil_type])
-      #  #JSON.cd(json, ['edges', 'properties', @typer.nil_type])
-      #end
+      def init_from_json(json)
+        super(json)
+        JSON.cd(json, ['nodes', @typer.nil_type, 'properties'])
+        JSON.cd(json, ['edges', @typer.nil_type, 'properties'])
+      end
     end
 
     class Scout < NeoScout::Scout
