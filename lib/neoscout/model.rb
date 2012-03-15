@@ -13,6 +13,18 @@ module NeoScout
 
     def checked_node_type?(node_type) ; raise NotImplementedError end
     def checked_edge_type?(edge_type) ; raise NotImplementedError end
+
+    def valid_value?(value_type, value) ; true end
+  end
+
+  module TyperValueTableMixin
+    def valid_value?(value_type, value)
+      if (entry = self.value_type_table[value_type])
+        entry.call(value_type_name, value)
+      else
+        true
+      end
+    end
   end
 
   class Counts

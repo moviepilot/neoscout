@@ -3,10 +3,10 @@ module NeoScout
   module Constraints
 
     class Constraint
-      def satisfied_by_node?(node) ; satisfied_by?(node) end
-      def satisfied_by_edge?(edge) ; satisfied_by?(edge) end
+      def satisfied_by_node?(typer, node) ; satisfied_by?(typer, node) end
+      def satisfied_by_edge?(typer, edge) ; satisfied_by?(typer, edge) end
 
-      def satisfied_by?(obj) ; raise NotImplementedError end
+      def satisfied_by?(typer, obj) ; raise NotImplementedError end
     end
 
     class PropConstraint < Constraint

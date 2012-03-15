@@ -117,6 +117,20 @@ aggregated into various statistics:
 * `nodes/dst_type/dst_stats/edge_type`
 
 
+### Optional type testing
+
+Additional, schema properties may have a string-valued `type` property for testing property *values.
+To register a type test for property values, your implementation of `Typer` needs to mixin
+`TyperValueTableMixin` (true for NeoScou::GDB_Neo4j::Typer). Then, just call:
+
+```ruby
+typer.value_type_table['string'] = lambda { |n,v| v.kind_of? String }
+```
+
+to register your type tests.  Properties that have a `type` attribute, and for which a type test is
+registered but whose value fails the test are considered as failed and reported accordingly.
+
+
 ### Example
 
 Please see `spec/lib/neoscout/gdb_neo4_spec.rb`, `spec/lib/neoscout/gdb_neo4_spec_schema.json`,
@@ -131,6 +145,8 @@ Please consult `neoscout --help` for more details.
 
 
 ## Implementation Notes
+
+This is how things work right now but expect a major change in architecture in the next version.
 
 `Scout` is the main class that implements the generic logic for processing nodes and edges using several
 helper classes

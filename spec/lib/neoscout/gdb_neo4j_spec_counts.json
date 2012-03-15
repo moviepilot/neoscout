@@ -3,17 +3,18 @@
         "properties":{
             "type":{
                 "relevant":true,
-                "counts":[7, 0, 7]
+                "counts":[8, 0, 8]
             },
             "name":{
                 "relevant":true,
-                "counts":[6, 1, 7]
+                "type":"string",
+                "counts":[7, 1, 8]
             },
             "age":{
                 "counts":[0, 1, 1]
             }
         },
-        "counts":[5, 2, 7],
+        "counts":[6, 2, 8],
         "src_stats":{
             "challenger":[1, 0, 1],
             "spectator":[1, 1, 2]
@@ -128,6 +129,6 @@
         "counts":[0, 0, 0]
     }
 }, "all":{
-    "node_counts":[6, 2, 8],
+    "node_counts":[7, 2, 9],
     "connection_counts":[4, 2, 6]
 }}

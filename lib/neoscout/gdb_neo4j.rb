@@ -6,12 +6,15 @@ module NeoScout
 
       class PropConstraint < NeoScout::Constraints::PropConstraint
 
-        def satisfied_by?(obj)
-          (obj.property?(@name) && satisfies_type?(@type, obj[@name])) || self.opt
+        def satisfied_by?(typer, obj)
+          if obj.property?(@name)
+            then satisfies_type?(typer, @type, obj[@name])
+            else self.opt
+          end
         end
 
-        def satisfies_type?(type, value)
-          true
+        def satisfies_type?(typer, type, value)
+          if type then typer.valid_value?(type, value) else true end
         end
       end
 
@@ -21,10 +24,14 @@ module NeoScout
 
       attr_accessor :type_attr
       attr_accessor :nil_type
+      attr_accessor :value_type_table
+
+      include TyperValueTableMixin
 
       def initialize
-        @type_attr = 'type'
-        @nil_type  = '__NOTYPE__'
+        @type_attr        = 'type'
+        @nil_type         = '__NOTYPE__'
+        @value_type_table = {}
       end
 
       def node_type(node)

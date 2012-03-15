@@ -37,6 +37,7 @@ module NeoScout
           @user_e = ::Neo4j::Node.new type: 'users', name: 'Ephraim'
           @user_f = ::Neo4j::Node.new type: 'users', name: 'Francois'
           @user_g = ::Neo4j::Node.new type: 'users'
+          @user_h = ::Neo4j::Node.new type: 'users', name: 0xbaadf00d
 
           @challenge1 = ::Neo4j::Node.new type: 'challenges', descr: 'Eat fish on friday'
 
@@ -61,6 +62,7 @@ module NeoScout
 
       it 'should verify properties correctly' do
         @it = ::NeoScout::GDB_Neo4j::Scout.new
+        @it.typer.value_type_table['string'] = lambda { |n,v| v.kind_of? String }
         @it.verifier.init_from_json @schema_json
         @counts = @it.new_counts
         @it.count_edges counts: @counts

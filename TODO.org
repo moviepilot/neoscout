@@ -1,16 +1,25 @@
 * Version 0.1
 ** DONE Minimal documentation
 ** Features
-*** type testing mechanism
-*** aggregate min-max-values -> recover largest edge ids
+*** DONE type testing mechanism
 *** DONE cardconstraints if ever: nixed, to be replaced with pacer-jogger constraints in 0.2
 *** visualization
 ** Integration and (alongside) testing
 *** put into sheldon
 *** limit number of queries / share results(?)
+*** more tests
 * Version 0.2
+** Redesign internal structure
+*** Brainstoerming
 ** Features
+*** aggregate min-max-values -> recover largest edge ids
 *** more precise schema input
 *** pacer-jogger constraint support
 *** cypher constraint support
 *** query execution tool (?)
+* Version 0.3
+** Cleanup standalone runner
+*** Refactor into class
+*** Push options to sinatra
+*** Better initialization (i.e. register types)
+** Support for blueprints graphs (?)

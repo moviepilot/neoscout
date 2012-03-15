@@ -6,7 +6,8 @@
                     "relevant":true
                 },
                 "name":{
-                    "relevant":true
+                    "relevant":true,
+                    "type":"string"
                 }
             }
         },
