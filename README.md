@@ -68,7 +68,7 @@ The currently supported schema format is
     },
     "node_type_b": {
         "properties": {
-            "property_a": { "relevant": true ,}
+            "property_a": { "relevant": true },
             "property_b": { "relevant": false }
          }
     }
