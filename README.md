@@ -14,6 +14,9 @@ a JSON schema file as described below.
 The general programmatic use of neoscout is:
 
 ```ruby
+require 'json'
+require 'neoscout'
+
 # load schema
 schema_json = JOSN.parse('...schema...')
 # make new scout for use with embedded neo4j database
@@ -27,10 +30,18 @@ scout.count_nodes counts: counts
 # add collected statistics back to schema_json
 counts.add_to_json schema_json
 # print result
-puts '<<RESULT'
-puts schema_json.to_json
-puts 'RESULT'
+puts "<<RESULT\n#{schema_json.to_json}\nRESULT"
 ```
+
+
+## Depends on
+
+jruby, neo4j, sinatra, json
+
+
+## Installation
+
+As a gem or via the typical bundle and rake build test install dance.
 
 
 ## Model
@@ -81,7 +92,7 @@ The currently supported schema format is
 }
 ```
 
-Some properties may additionally specify a value type under `type`. Verification of value types is
+Some properties may additionally specify a value type under `type`. Verification of value types needs to be
 specified programmatically.
 
 
@@ -119,9 +130,9 @@ aggregated into various statistics:
 
 ### Optional type testing
 
-Additional, schema properties may have a string-valued `type` property for testing property *values.
+Additionally, schema properties may have a string-valued `type` property for testing property *values.
 To register a type test for property values, your implementation of `Typer` needs to mixin
-`TyperValueTableMixin` (true for NeoScou::GDB_Neo4j::Typer). Then, just call:
+`TyperValueTableMixin` (true for NeoScout::GDB_Neo4j::Typer). Then, just call:
 
 ```ruby
 typer.value_type_table['string'] = lambda { |n,v| v.kind_of? String }
@@ -160,7 +171,7 @@ are provided in `constraints.rb`
 
 `Counts` is used for collecting statistics and heavily tied to logic implemented by `Scout`.
 
-JSON schema handling is found in `json_schema.rb`
+JSON schema handling is in `json_schema.rb`
 
 
 ### Specializing for a new database
@@ -173,4 +184,4 @@ values for the various member fields. The standalone runner currently is heavily
 
 * Node types are currently derived from a configurable property
 * Edge types directly correspond to the relationship type in neo4j
-* Unkown nodes/edges are assigned to a reserved "__NOTYPE__" type (the actual string may be overriden, see Typer)
+* Unkown nodes/edges are assigned to a reserved `__NOTYPE__` type (the actual string may be overriden, see Typer)
