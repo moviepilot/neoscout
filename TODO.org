@@ -1,15 +1,16 @@
 * Version 0.1
-* Documentation
-** overview
-** schema spec
-** output spec
-** standalone runner
-** rough code layout / how to extend
-* Features
-** type testing mechanism
-** cardconstraints if ever
-** more precise schema input
-** visualization
-* Integration and (alongside) testing
-** put into sheldon
-** limit number of queries / share results(?)
+** DONE Minimal documentation
+** Features
+*** type testing mechanism
+*** aggregate min-max-values -> recover largest edge ids
+*** DONE cardconstraints if ever: nixed, to be replaced with pacer-jogger constraints in 0.2
+*** visualization
+** Integration and (alongside) testing
+*** put into sheldon
+*** limit number of queries / share results(?)
+* Version 0.2
+** Features
+*** more precise schema input
+*** pacer-jogger constraint support
+*** cypher constraint support
+*** query execution tool (?)
