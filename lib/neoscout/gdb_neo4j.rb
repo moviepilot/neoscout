@@ -50,20 +50,38 @@ module NeoScout
     class ElementIterator < NeoScout::ElementIterator
 
       def iter_nodes(args)
+        if args[:report_progress]
+          then report = args[:report_progress]
+          else report = lambda { |mode, what, num| } end
         glops = org.neo4j.tooling.GlobalGraphOperations.at(Neo4j.db.graph)
         iter  = glops.getAllNodes.iterator
+        num   = 0
         while iter.hasNext do
           node = iter.next
-          yield node.wrapper unless node.getId == 0
+          num  = num + 1
+          report.call(:progress, :nodes, num)
+          yield node unless node.getId == 0
         end
+
+        report.call(:finish, :nodes, num)
+        num
       end
 
       def iter_edges(args)
+        if args[:report_progress]
+          then report = args[:report_progress]
+          else report = lambda { |mode, what, num| } end
         glops = org.neo4j.tooling.GlobalGraphOperations.at(Neo4j.db.graph)
         iter  = glops.getAllRelationships.iterator
+        num   = 0
         while iter.hasNext do
-          yield iter.next.wrapper
+          num  = num + 1
+          report.call(:progress, :edges, num)
+          yield iter.next
         end
+
+        report.call(:finish, :edges, num)
+        num
       end
 
     end

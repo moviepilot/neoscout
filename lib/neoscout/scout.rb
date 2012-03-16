@@ -58,7 +58,6 @@ module NeoScout
 
       @verifier.node_props[node_type].each do |constr|
         prop_ok   = constr.satisfied_by_node?(typer, node)
-        puts constr.name, prop_ok
         counts.count_node_prop(node_type, constr.name, prop_ok)
         node_props.delete(constr.name)
         node_ok &&= prop_ok
@@ -79,14 +78,10 @@ module NeoScout
       edge_props = Set.new(edge.props.keys)
       edge_props.delete('_neo_id')
 
-      puts "A>>#{edge_props.to_a}"
-
-      src_type = @typer.node_type(edge.start_node)
-      dst_type = @typer.node_type(edge.end_node)
+      src_type = @typer.node_type(edge.getStartNode)
+      dst_type = @typer.node_type(edge.getEndNode)
 
       edge_ok = @verifier.allowed_edge?(edge_type, src_type, dst_type)
-
-      puts "B>>#{edge_ok}"
 
       @verifier.edge_props[edge_type].each do |constr|
         prop_ok   = constr.satisfied_by_edge?(typer, edge)
