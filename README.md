@@ -99,7 +99,7 @@ specified programmatically.
 ### Schema output
 
 When the validation has been completed, collected statistics may be appended the input JSON schema. For every collected
-statistic, a counter of the form `[num_ok, num_failed, num_total]` is added. The list of currently collected
+statistic, a counter of the form `[num_failed, num_total]` is added. The list of currently collected
 statistics is:
 
 * `nodes/type/counts` number of of nodes of type `type`
