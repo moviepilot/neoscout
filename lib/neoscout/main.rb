@@ -9,11 +9,15 @@ module NeoScout
     attr_reader :opt_db
     attr_reader :opt_schema
     attr_reader :opt_port
+    attr_reader :opt_webservice
     attr_reader :opt_bind
     attr_reader :opt_report
+    attr_reader :opt_no_nodes
+    attr_reader :opt_no_edges
 
     def initialize
-      @opt_report = 0
+      @opt_report     = 0
+      @opt_webservice = true
       parse_opts
     end
 
@@ -37,6 +41,15 @@ module NeoScout
         end
         opts.on('-r', '--report NUM', 'Report progress every NUM graph elements') do |num|
           @opt_report = num.to_i
+        end
+        opts.on('--no-nodes', 'Dont iterate over nodes') do
+          @opt_no_nodes = true
+        end
+        opts.on('--no-edges', 'Dont iterate over edges') do
+          @opt_no_edges = true
+        end
+        opt.on('--w', '--webservice', 'Run inside sinatra') do
+          @opt_webservice = true
         end
         opts.on('-h', '--help', 'Display this screen') do
           puts opts
@@ -66,6 +79,35 @@ module NeoScout
     end
 
     def run
+      if self.opt_webservice
+        then run_webservice
+        else run_standalone(nil) end
+    end
+
+    class FakeLogger
+      def info(*args)
+        puts *args
+      end
+    end
+
+    def run_standalone(logger)
+      schema    = main.opt_schema.call()
+      scout    = scout_maker.call()
+      scout.verifier.init_from_json schema
+      counts   = scout.new_counts
+      logger   = FakeLogger.new unless logger
+      progress = lambda do |mode, what, num|
+        if ((num % main.opt_report) == 0) || (mode == :finish)
+          logger.info("#{DateTime.now}: #{what} ITERATOR PROGRESS (#{mode} / #{num})")
+        end
+      end
+      scout.count_edges counts: counts, report_progress: progress unless main.opt_no_edges
+      scout.count_nodes counts: counts, report_progress: progress unless main.opt_no_nodes
+      counts.add_to_json schema
+      schema.to_json
+    end
+
+    def run_webservice
       ### Load schema at least once to know that we're safe
       @opt_schema.call()
 
@@ -99,20 +141,7 @@ module NeoScout
       get '/verify' do
         content_type :json
 
-        schema = main.opt_schema.call()
-        scout = scout_maker.call()
-        scout.verifier.init_from_json schema
-        counts   = scout.new_counts
-        logger   = self.logger
-        progress = lambda do |mode, what, num|
-          if ((num % main.opt_report) == 0) || (what == :finish)
-            logger.info("#{DateTime.now}: #{what} ITERATOR PROGRESS (#{mode} / #{num})")
-          end
-        end
-        scout.count_edges counts: counts, report_progress: progress
-        scout.count_nodes counts: counts, report_progress: progress
-        counts.add_to_json schema
-        schema.to_json
+        main.run_standalone(self.logger)
       end
 
       ### Shutdown server, the hard way

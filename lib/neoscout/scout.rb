@@ -28,9 +28,13 @@ module NeoScout
     def count_nodes(args)
       counts = prep_counts(args[:counts])
       @iterator.iter_nodes(args) do |node|
-        node_type = @typer.node_type(node)
-        node_ok   = process_node(counts, node_type, node)
-        counts.count_node(node_type, node_ok)
+        begin
+          node_type = @typer.node_type(node)
+          node_ok   = process_node(counts, node_type, node)
+          counts.count_node(node_type, node_ok)
+        rescue Exception => e
+          counts.count_node(e.class.to_s, false)
+        end
       end
       counts
     end
@@ -38,9 +42,13 @@ module NeoScout
     def count_edges(args)
       counts = prep_counts(args[:counts])
       @iterator.iter_edges(args) do |edge|
-        edge_type = @typer.edge_type(edge)
-        edge_ok   = process_edge(counts, edge_type, edge)
-        counts.count_edge(edge_type, edge_ok)
+        begin
+          edge_type = @typer.edge_type(edge)
+          edge_ok   = process_edge(counts, edge_type, edge)
+          counts.count_edge(edge_type, edge_ok)
+        rescue Exception => e
+          counts.count_edge(e.class.to_s, false)
+        end
       end
       counts
     end

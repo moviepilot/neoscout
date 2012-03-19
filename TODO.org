@@ -19,7 +19,7 @@
 *** query execution tool (?)
 * Version 0.3
 ** Cleanup standalone runner
-*** Refactor into class
+*** DONE Refactor into class
 *** Push options to sinatra
 *** Better initialization (i.e. register types)
 ** Support for blueprints graphs (?)

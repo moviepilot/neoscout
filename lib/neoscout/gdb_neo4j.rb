@@ -29,13 +29,15 @@ module NeoScout
       include TyperValueTableMixin
 
       def initialize
-        @type_attr        = 'type'
+        @type_attr        = '_classname'
         @nil_type         = '__NOTYPE__'
         @value_type_table = {}
       end
 
       def node_type(node)
-        node[@type_attr] || @nil_type
+        props = node.props
+        return props[@type_attr] if props.has_key? @type_attr
+        @nil_type
       end
 
       def edge_type(edge)
