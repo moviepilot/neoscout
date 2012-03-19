@@ -36,6 +36,10 @@ module NeoScout
       @total
     end
 
+    def empty?
+      @total == 0
+    end
+
     def to_s
       "(#{num_ok}/#{num_failed}/#{num_total})"
     end

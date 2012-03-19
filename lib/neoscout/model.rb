@@ -15,6 +15,9 @@ module NeoScout
     def checked_edge_type?(edge_type) ; raise NotImplementedError end
 
     def valid_value?(value_type, value) ; true end
+
+    def unknown_node_type?(type) ; false end
+    def unknown_edge_type?(type) ; false end
   end
 
   module TyperValueTableMixin
@@ -42,7 +45,8 @@ module NeoScout
     attr_reader :edge_link_src_stats
     attr_reader :edge_link_dst_stats
 
-    def initialize
+    def initialize(typer)
+      @typer = typer
       reset
     end
 

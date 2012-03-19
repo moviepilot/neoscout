@@ -3,7 +3,7 @@ module NeoScout
   class Counter
 
     def to_json
-      [ num_ok, num_failed, num_total ]
+      [ num_failed, num_total ]
     end
 
   end
@@ -47,6 +47,7 @@ module NeoScout
     end
   end
 
+  #noinspection RubyTooManyInstanceVariablesInspection
   class Counts
 
     def add_to_json(json)
@@ -56,29 +57,45 @@ module NeoScout
 
       nodes_json = JSON.cd(json, %w(nodes))
       @typed_nodes.each_pair do |type, count|
-        JSON.cd(nodes_json, [type])['counts'] = count.to_json
+        skip = skip_from_json(:node, type, count)
+        JSON.cd(nodes_json, [type])['counts'] = count.to_json unless skip
       end
 
       nodes_json = JSON.cd(json, %w(nodes))
       @typed_node_props.each_pair do |type, props|
         props.each_pair do |name, count|
-          JSON.cd(nodes_json, [type, 'properties', name])['counts'] = count.to_json
+          skip = skip_from_json(:node, type, count)
+          JSON.cd(nodes_json, [type, 'properties', name])['counts'] = count.to_json unless skip
         end
       end
 
       edges_json = JSON.cd(json, %w(connections))
       @typed_edges.each_pair do |type, count|
-        JSON.cd(edges_json, [type])['counts'] = count.to_json
+        skip = skip_from_json(:edge, type, count)
+        JSON.cd(edges_json, [type])['counts'] = count.to_json unless skip
       end
 
       edges_json = JSON.cd(json, %w(connections))
       @typed_edge_props.each_pair do |type, props|
         props.each_pair do |name, count|
-          JSON.cd(edges_json, [type, 'properties', name])['counts'] = count.to_json
+          skip = skip_from_json(:edge, type, count)
+          JSON.cd(edges_json, [type, 'properties', name])['counts'] = count.to_json unless skip
         end
       end
 
       add_link_stats_to_json(json)
+    end
+
+    def skip_from_json(kind, type, count)
+      false unless count.empty?
+      case kind
+        when :node
+          @typer.unknown_node_type?(type)
+        when :edge
+          @typer.unknown_edge_type?(type)
+        else
+          raise ArgumentError
+      end
     end
 
     protected

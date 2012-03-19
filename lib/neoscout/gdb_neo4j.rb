@@ -52,6 +52,9 @@ module NeoScout
       def checked_node_type?(node_type) ; node_type != self.nil_type end
       def checked_edge_type?(edge_type) ; edge_type != self.nil_type end
 
+      def unknown_node_type?(type) ; type == @nil_type end
+      def unknown_edge_type?(type) ; type == @nil_type end
+
       protected
 
       def node_mapped(t)
@@ -61,6 +64,7 @@ module NeoScout
       def edge_mapped(t)
         if self.edge_mapper then self.edge_mapper.call(t) else t end
       end
+
     end
 
     class ElementIterator < NeoScout::ElementIterator
@@ -118,9 +122,6 @@ module NeoScout
 
       def init_from_json(json)
         super(json)
-        # Ensure __NOTYPE__entries always have a properties hash
-        JSON.cd(json, ['nodes', @typer.nil_type, 'properties'])
-        JSON.cd(json, ['connections', @typer.nil_type, 'properties'])
       end
     end
 

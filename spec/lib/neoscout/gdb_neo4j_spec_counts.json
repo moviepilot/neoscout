@@ -3,67 +3,63 @@
         "properties":{
             "type":{
                 "relevant":true,
-                "counts":[8, 0, 8]
+                "counts":[0, 8]
             },
             "name":{
                 "relevant":true,
                 "type":"string",
-                "counts":[7, 1, 8]
+                "counts":[1, 8]
             },
             "age":{
-                "counts":[0, 1, 1]
+                "counts":[1, 1]
             }
         },
-        "counts":[6, 2, 8],
+        "counts":[2, 8],
         "src_stats":{
-            "challenger":[1, 0, 1],
-            "spectator":[1, 1, 2]
+            "challenger":[0, 1],
+            "spectator":[1, 2]
         },
         "dst_stats":{
-            "challengee":[1, 0, 1],
-            "fugleman":[1, 1, 2],
-            "spectator":[0, 1, 1]
+            "challengee":[0, 1],
+            "fugleman":[1, 2],
+            "spectator":[1, 1]
         }
     },
     "challenges":{
         "properties":{
             "type":{
                 "relevant":true,
-                "counts":[1, 0, 1]
+                "counts":[0, 1]
             },
             "descr":{
                 "relevant":false,
-                "counts":[1, 0, 1]
+                "counts":[0, 1]
             }
         },
-        "counts":[1, 0, 1],
+        "counts":[0, 1],
         "src_stats":{
-            "challengee":[1, 0, 1],
-            "fugleman":[1, 1, 2]
+            "challengee":[0, 1],
+            "fugleman":[1, 2]
         },
         "dst_stats":{
-            "challenger":[1, 0, 1],
-            "spectator":[1, 0, 1]
+            "challenger":[0, 1],
+            "spectator":[0, 1]
         }
-    },
-    "__NOTYPE__":{
-        "properties":{},
-        "counts":[0, 0, 0]
     }
 }, "connections":{
     "challenger":{
         "sources":["users"],
         "targets":["challenges"],
         "properties":{},
-        "counts":[1, 0, 1],
+        "counts":[0, 1],
         "src_stats":{
             "users":{
-                "challenges":[1, 0, 1]
+                "challenges":[0, 1]
             }
         },
         "dst_stats":{
             "challenges":{
-                "users":[1, 0, 1]
+                "users":[0, 1]
             }
         }
     },
@@ -71,19 +67,19 @@
         "sources":["users"],
         "targets":["challenges"],
         "properties":{},
-        "counts":[1, 1, 2],
+        "counts":[1, 2],
         "src_stats":{
             "users":{
-                "challenges":[1, 0, 1],
-                "users":[0, 1, 1]
+                "challenges":[0, 1],
+                "users":[1, 1]
             }
         },
         "dst_stats":{
             "challenges":{
-                "users":[1, 0, 1]
+                "users":[0, 1]
             },
             "users":{
-                "users":[0, 1, 1]
+                "users":[1, 1]
             }
         }
     },
@@ -91,15 +87,15 @@
         "targets":["users"],
         "sources":["challenges"],
         "properties":{},
-        "counts":[1, 0, 1],
+        "counts":[0, 1],
         "src_stats":{
             "challenges":{
-                "users":[1, 0, 1]
+                "users":[0, 1]
             }
         },
         "dst_stats":{
             "users":{
-                "challenges":[1, 0, 1]
+                "challenges":[0, 1]
             }
         }
     },
@@ -107,28 +103,24 @@
         "properties":{
             "accepted":{
                 "relevant":true,
-                "counts":[1, 1, 2]
+                "counts":[1, 2]
             }
         },
         "targets":["users"],
         "sources":["challenges"],
-        "counts":[1, 1, 2],
+        "counts":[1, 2],
         "src_stats":{
             "challenges":{
-                "users":[1, 1, 2]
+                "users":[1, 2]
             }
         },
         "dst_stats":{
             "users":{
-                "challenges":[1, 1, 2]
+                "challenges":[1, 2]
             }
         }
-    },
-    "__NOTYPE__":{
-        "properties":{},
-        "counts":[0, 0, 0]
     }
 }, "all":{
-    "node_counts":[7, 2, 9],
-    "connection_counts":[4, 2, 6]
+    "node_counts":[2, 9],
+    "connection_counts":[2, 6]
 }}

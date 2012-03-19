@@ -22,7 +22,7 @@ module NeoScout
 
 
     def new_counts
-      NeoScout::Counts.new
+      NeoScout::Counts.new(typer)
     end
 
     def count_nodes(args)
