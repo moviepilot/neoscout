@@ -154,6 +154,15 @@ There is a rudimentary, sinatra-based standalone runner that attaches to a local
 fetches a schema url and verifies the database against it. It is in `scripts/neoscout` and is installed by default.
 Please consult `neoscout --help` for more details.
 
+### Webservice API
+
+The standalone runner can be run as a RESTful webservice using `-w`. If this is done, it suppors the
+follwing API
+
+* `/schema` retrieve schema
+* `/verify` trigger verification
+* `/shutdown` shutdown
+
 
 ## Implementation Notes
 

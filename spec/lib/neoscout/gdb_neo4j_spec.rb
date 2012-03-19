@@ -62,6 +62,7 @@ module NeoScout
 
       it 'should verify properties correctly' do
         @it = ::NeoScout::GDB_Neo4j::Scout.new
+        @it.typer.type_attr = 'type'
         @it.typer.value_type_table['string'] = lambda { |n,v| v.kind_of? String }
         @it.verifier.init_from_json @schema_json
         @counts = @it.new_counts

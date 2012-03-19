@@ -25,28 +25,42 @@ module NeoScout
       attr_accessor :type_attr
       attr_accessor :nil_type
       attr_accessor :value_type_table
+      attr_accessor :node_mapper
+      attr_accessor :edge_mapper
 
       include TyperValueTableMixin
 
       def initialize
         @type_attr        = '_classname'
         @nil_type         = '__NOTYPE__'
+        @node_mapper      = nil
+        @edge_mapper      = nil
         @value_type_table = {}
       end
 
       def node_type(node)
         props = node.props
-        return props[@type_attr] if props.has_key? @type_attr
+        return node_mapped(props[@type_attr]) if props.has_key? @type_attr
         @nil_type
       end
 
       def edge_type(edge)
         type = edge.rel_type
-        if type then type.to_s else @nil_type end
+        if type then edge_mapped(type.to_s) else @nil_type end
       end
 
       def checked_node_type?(node_type) ; node_type != self.nil_type end
       def checked_edge_type?(edge_type) ; edge_type != self.nil_type end
+
+      protected
+
+      def node_mapped(t)
+        if self.node_mapper then self.node_mapper.call(t) else t end
+      end
+
+      def edge_mapped(t)
+        if self.edge_mapper then self.edge_mapper.call(t) else t end
+      end
     end
 
     class ElementIterator < NeoScout::ElementIterator

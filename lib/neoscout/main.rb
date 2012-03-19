@@ -2,6 +2,7 @@ require 'optparse'
 require 'json'
 require 'httparty'
 require 'date'
+require 'active_model'
 
 module NeoScout
 
@@ -14,10 +15,14 @@ module NeoScout
     attr_reader :opt_report
     attr_reader :opt_no_nodes
     attr_reader :opt_no_edges
+    attr_reader :opt_type_mapper
+    attr_reader :opt_output_file
+
 
     def initialize
-      @opt_report     = 0
-      @opt_webservice = true
+      @opt_report      = 0
+      @opt_webservice  = false
+      @opt_output_file = nil
       parse_opts
     end
 
@@ -32,6 +37,12 @@ module NeoScout
         end
         opts.on('-s', '--schema-file FILE', 'schema file') do |file|
           @opt_schema = lambda { || ::JSON.parse(IO::read(file)) }
+        end
+        opts.on('o', '--output-file FILE', 'output file in standalone mode') do |f|
+          @opt_output_file = f
+        end
+        opts.on('-w', '--webservice', 'Run inside sinatra') do
+          @opt_webservice = true
         end
         opts.on('-p', '--port PORT', 'Port to be used') do |port|
           @opt_port   = port.to_i
@@ -48,8 +59,18 @@ module NeoScout
         opts.on('--no-edges', 'Dont iterate over edges') do
           @opt_no_edges = true
         end
-        opt.on('--w', '--webservice', 'Run inside sinatra') do
-          @opt_webservice = true
+        opts.on('-M', '--type-mapper MAPPER',
+                'Set the type mapper (underscore, downcase, upcase)') do |mapper|
+          @opt_type_mapper = case mapper
+                               when 'underscore'
+                                 lambda { |t| t.underscore }
+                               when 'downcase'
+                                 lambda { |t| t.downcase }
+                               when 'upcase'
+                                 lambda { |t| t.upcase }
+                               else
+                                 raise ArgumentException('Unsupported mapper')
+                             end
         end
         opts.on('-h', '--help', 'Display this screen') do
           puts opts
@@ -57,13 +78,19 @@ module NeoScout
         end
       end
       optparse.parse!
+      @opt_output_file = nil if @opt_webservice
     end
 
     def start_db
       @opt_db.match(/(neo4j:)(.*)/) do |m|
         Neo4j.config[:storage_path] = m[2] unless (m[2].length == 0)
         Neo4j.start
-        return lambda { ::NeoScout::GDB_Neo4j::Scout.new }
+        return lambda do
+          scout = ::NeoScout::GDB_Neo4j::Scout.new
+          scout.typer.node_mapper = self.opt_type_mapper
+          scout.typer.edge_mapper = self.opt_type_mapper
+          scout
+        end
       end
 
       raise ArgumentError("Unsupported database type")
@@ -78,42 +105,44 @@ module NeoScout
       raise ArgumentError("Unsupported database type")
     end
 
-    def run
-      if self.opt_webservice
-        then run_webservice
-        else run_standalone(nil) end
-    end
-
-    class FakeLogger
-      def info(*args)
+    class SimpleConsoleLogger
+      def method_missing(key, *args)
+        print key
+        print ': '
         puts *args
       end
     end
 
-    def run_standalone(logger)
-      schema    = main.opt_schema.call()
+    def run
+      ### Load schema at least once to know that we're safe
+      self.opt_schema.call()
+      ### Run as service if requested
+      return run_webservice(self.opt_schema, self.start_db) if self.opt_webservice
+
+      json = run_standalone(self.opt_schema, self.start_db, SimpleConsoleLogger.new)
+      if self.opt_output_file then File.open(self.opt_output_file, 'w') { |f| f.write(json) }
+                              else puts(json) end
+      shutdown_db
+    end
+
+    def run_standalone(schema_maker, scout_maker, logger)
+      schema   = schema_maker.call()
       scout    = scout_maker.call()
       scout.verifier.init_from_json schema
       counts   = scout.new_counts
-      logger   = FakeLogger.new unless logger
+      logger   = SimpleConsoleLogger.new unless logger
       progress = lambda do |mode, what, num|
-        if ((num % main.opt_report) == 0) || (mode == :finish)
+        if ((num % self.opt_report) == 0) || (mode == :finish)
           logger.info("#{DateTime.now}: #{what} ITERATOR PROGRESS (#{mode} / #{num})")
         end
       end
-      scout.count_edges counts: counts, report_progress: progress unless main.opt_no_edges
-      scout.count_nodes counts: counts, report_progress: progress unless main.opt_no_nodes
+      scout.count_edges counts: counts, report_progress: progress unless self.opt_no_edges
+      scout.count_nodes counts: counts, report_progress: progress unless self.opt_no_nodes
       counts.add_to_json schema
       schema.to_json
     end
 
-    def run_webservice
-      ### Load schema at least once to know that we're safe
-      @opt_schema.call()
-
-      ### Load database
-      scout_maker = self.start_db
-
+    def run_webservice(schema_maker, scout_maker)
       ### Run sinatra
       require 'sinatra'
 
@@ -134,14 +163,13 @@ module NeoScout
       ### Return schema
       get '/schema' do
         content_type :json
-        main.opt_schema.call().to_json
+        schema_maker.call().to_json
       end
 
       ### Run verify over database and report results
       get '/verify' do
         content_type :json
-
-        main.run_standalone(self.logger)
+        main.run_standalone(schema_maker, scout_maker, self.logger)
       end
 
       ### Shutdown server, the hard way
