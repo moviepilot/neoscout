@@ -1,3 +1,5 @@
+require 'java'
+require 'yaml'
 require 'optparse'
 require 'json'
 require 'httparty'
@@ -15,6 +17,7 @@ module NeoScout
     attr_reader :opt_bind
     attr_reader :opt_report
     attr_reader :opt_no_nodes
+    attr_reader :opt_db_config
     attr_reader :opt_no_edges
     attr_reader :opt_type_mapper
     attr_reader :opt_pre_mapper
@@ -26,6 +29,7 @@ module NeoScout
       @opt_webservice  = false
       @opt_output_file = nil
       @opt_no_nodes    = false
+      @opt_db_config   = nil
       @opt_no_edges    = false
       @opt_pre_mapper  = lambda { |t| t }
       @opt_type_mapper = lambda { |t| t }
@@ -84,6 +88,9 @@ module NeoScout
                                  raise ArgumentException('Unsupported mapper')
                              end
         end
+        opts.on('-C', '--db-config FILE', 'Set config file for db driver') do |file|
+          @opt_db_config = file
+        end
         opts.on('-h', '--help', 'Display this screen') do
           puts opts
           exit 1
@@ -96,7 +103,7 @@ module NeoScout
     def start_db
       @opt_db.match(/(neo4j:)(.*)/) do |m|
         Neo4j.config[:storage_path] = m[2] unless (m[2].length == 0)
-        Neo4j.start
+        YAML.load_file(@opt_db_config).each_pair { |k,v| Neo4j.config[k] = v } if @opt_db_config
         return lambda do
           scout = ::NeoScout::GDB_Neo4j::Scout.new
           pre_mapper = self.opt_pre_mapper
