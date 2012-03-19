@@ -3,6 +3,7 @@ require 'json'
 require 'httparty'
 require 'date'
 require 'active_model'
+require 'active_support/inflector'
 
 module NeoScout
 
@@ -16,6 +17,7 @@ module NeoScout
     attr_reader :opt_no_nodes
     attr_reader :opt_no_edges
     attr_reader :opt_type_mapper
+    attr_reader :opt_pre_mapper
     attr_reader :opt_output_file
 
 
@@ -23,6 +25,10 @@ module NeoScout
       @opt_report      = 0
       @opt_webservice  = false
       @opt_output_file = nil
+      @opt_no_nodes    = false
+      @opt_no_edges    = false
+      @opt_pre_mapper  = lambda { |t| t }
+      @opt_type_mapper = lambda { |t| t }
       parse_opts
     end
 
@@ -38,7 +44,7 @@ module NeoScout
         opts.on('-s', '--schema-file FILE', 'schema file') do |file|
           @opt_schema = lambda { || ::JSON.parse(IO::read(file)) }
         end
-        opts.on('o', '--output-file FILE', 'output file in standalone mode') do |f|
+        opts.on('-o', '--output-file FILE', 'output file in standalone mode') do |f|
           @opt_output_file = f
         end
         opts.on('-w', '--webservice', 'Run inside sinatra') do
@@ -53,11 +59,17 @@ module NeoScout
         opts.on('-r', '--report NUM', 'Report progress every NUM graph elements') do |num|
           @opt_report = num.to_i
         end
-        opts.on('--no-nodes', 'Dont iterate over nodes') do
+        opts.on('--no-nodes', 'Do not iterate over nodes') do
           @opt_no_nodes = true
         end
-        opts.on('--no-edges', 'Dont iterate over edges') do
+        opts.on('--no-edges', 'Do not iterate over edges') do
           @opt_no_edges = true
+        end
+        opts.on('-P', '--pluralize-types', 'Pluralize type names') do
+          @opt_pre_mapper = lambda { |t| t.pluralize }
+        end
+        opts.on('-S', '--singularize-types', 'Singularize type names') do
+          @opt_pre_mapper = lambda { |t| t.singularize }
         end
         opts.on('-M', '--type-mapper MAPPER',
                 'Set the type mapper (underscore, downcase, upcase)') do |mapper|
@@ -87,8 +99,9 @@ module NeoScout
         Neo4j.start
         return lambda do
           scout = ::NeoScout::GDB_Neo4j::Scout.new
-          scout.typer.node_mapper = self.opt_type_mapper
-          scout.typer.edge_mapper = self.opt_type_mapper
+          pre_mapper = self.opt_pre_mapper
+          scout.typer.node_mapper = lambda { |t| self.opt_type_mapper(pre_mapper.call(t)) }
+          scout.typer.edge_mapper = lambda { |t| self.opt_type_mapper(pre_mapper.call(t)) }
           scout
         end
       end
@@ -120,8 +133,9 @@ module NeoScout
       return run_webservice(self.opt_schema, self.start_db) if self.opt_webservice
 
       json = run_standalone(self.opt_schema, self.start_db, SimpleConsoleLogger.new)
-      if self.opt_output_file then File.open(self.opt_output_file, 'w') { |f| f.write(json) }
-                              else puts(json) end
+      if self.opt_output_file
+        then File.open(self.opt_output_file, 'w') { |f| f.write(json) }
+        else puts(json) end
       shutdown_db
     end
 
