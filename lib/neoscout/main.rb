@@ -107,8 +107,8 @@ module NeoScout
         return lambda do
           scout = ::NeoScout::GDB_Neo4j::Scout.new
           pre_mapper = self.opt_pre_mapper
-          scout.typer.node_mapper = lambda { |t| self.opt_type_mapper(pre_mapper.call(t)) }
-          scout.typer.edge_mapper = lambda { |t| self.opt_type_mapper(pre_mapper.call(t)) }
+          scout.typer.node_mapper = lambda { |t| self.opt_type_mapper.call(pre_mapper.call(t)) }
+          scout.typer.edge_mapper = lambda { |t| self.opt_type_mapper.call(pre_mapper.call(t)) }
           scout
         end
       end

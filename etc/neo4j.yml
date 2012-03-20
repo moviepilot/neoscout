@@ -1,0 +1,16 @@
+neostore.nodestore.db.mapped_memory: 400M
+neostore.relationshipstore.db.mapped_memory: 1G
+neostore.propertystore.db.mapped_memory: 6G
+neostore.propertystore.db.index.mapped_memory: 50M
+neostore.propertystore.db.index.keys.mapped_memory: 50M
+neostore.propertystore.db.strings.mapped_memory: 500M
+neostore.propertystore.db.arrays.mapped_memory: 500M
+
+# Keeping the defaults here for reference
+# neostore.nodestore.db.mapped_memory: 25M
+# neostore.relationshipstore.db.mapped_memory: 50M
+# neostore.propertystore.db.mapped_memory: 90M
+# neostore.propertystore.db.index.mapped_memory: 1M
+# neostore.propertystore.db.index.keys.mapped_memory: 1M
+# neostore.propertystore.db.strings.mapped_memory: 130M
+# neostore.propertystore.db.arrays.mapped_memory: 130M

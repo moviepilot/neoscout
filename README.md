@@ -191,6 +191,8 @@ values for the various member fields. The standalone runner currently is heavily
 
 ### Notes on GDB_Neo4j
 
-* Node types are currently derived from a configurable property
+* Node types are currently derived from a configurable property (defaults to '_classname')
 * Edge types directly correspond to the relationship type in neo4j
 * Unkown nodes/edges are assigned to a reserved `__NOTYPE__` type (the actual string may be overriden, see Typer)
+* You can pass configuration options for neo4j using `-C <path-to-yml>`. This is especially important for larger
+databases. See etc/neo4j.yml for an example.

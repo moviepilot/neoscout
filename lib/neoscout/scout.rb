@@ -33,6 +33,7 @@ module NeoScout
           node_ok   = process_node(counts, node_type, node)
           counts.count_node(node_type, node_ok)
         rescue Exception => e
+          puts e
           counts.count_node(e.class.to_s, false)
         end
       end
@@ -47,6 +48,7 @@ module NeoScout
           edge_ok   = process_edge(counts, edge_type, edge)
           counts.count_edge(edge_type, edge_ok)
         rescue Exception => e
+          puts e
           counts.count_edge(e.class.to_s, false)
         end
       end
