@@ -104,6 +104,7 @@ module NeoScout
       @opt_db.match(/(neo4j:)(.*)/) do |m|
         Neo4j.config[:storage_path] = m[2] unless (m[2].length == 0)
         YAML.load_file(@opt_db_config).each_pair { |k,v| Neo4j.config[k] = v } if @opt_db_config
+        Neo4j.start
         return lambda do
           scout = ::NeoScout::GDB_Neo4j::Scout.new
           pre_mapper = self.opt_pre_mapper
