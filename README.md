@@ -122,8 +122,8 @@ Additionally, for each edge of edge type `edge_type` it is verified, wether it's
 Any edge type, for which these arrays are missing is considered to be verified by this test. Again, the results are
 aggregated into various statistics:
 
-* `connections/edge_type/src_stats/src_type/dst_type`
-* `connections/edge_type/dst_stats/dst_type/src_type`
+* `connections/edge_type/src_stats/[ { "name": src_type, "to_dst": [ { "name": dst_type, "counts": /*count */ } ] } ]`
+* `connections/edge_type/dst_stats/[ { "name": dst_type, "from_src": [ { "name": src_type, "counts": /*count */ } ] } ]`
 * `nodes/src_type/src_stats/edge_type`
 * `nodes/dst_type/dst_stats/edge_type`
 

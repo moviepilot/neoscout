@@ -3,47 +3,95 @@
         "properties":{
             "type":{
                 "relevant":true,
-                "counts":[0, 8]
+                "counts":{
+                    "num_failed":0,
+                    "num_total":8
+                }
             },
             "name":{
                 "relevant":true,
                 "type":"string",
-                "counts":[1, 8]
+                "counts":{
+                    "num_failed":1,
+                    "num_total":8
+                }
             },
             "age":{
-                "counts":[1, 1]
+                "counts":{
+                    "num_failed":1,
+                    "num_total":1
+                }
             }
         },
-        "counts":[2, 8],
+        "counts":{
+            "num_failed":2,
+            "num_total":8
+        },
         "src_stats":{
-            "challenger":[0, 1],
-            "spectator":[1, 2]
+            "challenger":{
+                "num_failed":0,
+                "num_total":1
+            },
+            "spectator":{
+                "num_failed":1,
+                "num_total":2
+            }
         },
         "dst_stats":{
-            "challengee":[0, 1],
-            "fugleman":[1, 2],
-            "spectator":[1, 1]
+            "challengee":{
+                "num_failed":0,
+                "num_total":1
+            },
+            "fugleman":{
+                "num_failed":1,
+                "num_total":2
+            },
+            "spectator":{
+                "num_failed":1,
+                "num_total":1
+            }
         }
     },
     "challenges":{
         "properties":{
             "type":{
                 "relevant":true,
-                "counts":[0, 1]
+                "counts":{
+                    "num_failed":0,
+                    "num_total":1
+                }
             },
             "descr":{
                 "relevant":false,
-                "counts":[0, 1]
+                "counts":{
+                    "num_failed":0,
+                    "num_total":1
+                }
             }
         },
-        "counts":[0, 1],
+        "counts":{
+            "num_failed":0,
+            "num_total":1
+        },
         "src_stats":{
-            "challengee":[0, 1],
-            "fugleman":[1, 2]
+            "challengee":{
+                "num_failed":0,
+                "num_total":1
+            },
+            "fugleman":{
+                "num_failed":1,
+                "num_total":2
+            }
         },
         "dst_stats":{
-            "challenger":[0, 1],
-            "spectator":[0, 1]
+            "challenger":{
+                "num_failed":0,
+                "num_total":1
+            },
+            "spectator":{
+                "num_failed":0,
+                "num_total":1
+            }
         }
     }
 }, "connections":{
@@ -51,76 +99,184 @@
         "sources":["users"],
         "targets":["challenges"],
         "properties":{},
-        "counts":[0, 1],
-        "src_stats":{
-            "users":{
-                "challenges":[0, 1]
-            }
+        "counts":{
+            "num_failed":0,
+            "num_total":1
         },
-        "dst_stats":{
-            "challenges":{
-                "users":[0, 1]
+        "src_stats":[
+            {
+                "name":"users",
+                "to_dst":[
+                    {
+                        "name":"challenges",
+                        "counts":{
+                            "num_failed":0,
+                            "num_total":1
+                        }
+                    }
+                ]
             }
-        }
+        ],
+        "dst_stats":[
+            {
+                "name":"challenges",
+                "from_src":[
+                    {
+                        "name":"users",
+                        "counts":{
+                            "num_failed":0,
+                            "num_total":1
+                        }
+                    }
+                ]
+            }
+        ]
     },
     "spectator":{
         "sources":["users"],
         "targets":["challenges"],
         "properties":{},
-        "counts":[1, 2],
-        "src_stats":{
-            "users":{
-                "challenges":[0, 1],
-                "users":[1, 1]
-            }
+        "counts":{
+            "num_failed":1,
+            "num_total":2
         },
-        "dst_stats":{
-            "challenges":{
-                "users":[0, 1]
-            },
-            "users":{
-                "users":[1, 1]
+        "src_stats":[
+            {
+                "name":"users",
+                "to_dst":[
+                    {
+                        "name":"challenges",
+                        "counts":{
+                            "num_failed":0,
+                            "num_total":1
+                        }
+                    },
+                    {
+                        "name":"users",
+                        "counts":{
+                            "num_failed":1,
+                            "num_total":1
+                        }
+                    }
+                ]
             }
-        }
+        ],
+        "dst_stats":[
+            {
+                "name":"challenges",
+                "from_src":[
+                    {
+                        "name":"users",
+                        "counts":{
+                            "num_failed":0,
+                            "num_total":1
+                        }
+                    }
+                ]
+            },
+            {
+                "name":"users",
+                "from_src":[
+                    {
+                        "name":"users",
+                        "counts":{
+                            "num_failed":1,
+                            "num_total":1
+                        }
+                    }
+                ]
+            }
+        ]
     },
     "challengee":{
         "targets":["users"],
         "sources":["challenges"],
         "properties":{},
-        "counts":[0, 1],
-        "src_stats":{
-            "challenges":{
-                "users":[0, 1]
-            }
+        "counts":{
+            "num_failed":0,
+            "num_total":1
         },
-        "dst_stats":{
-            "users":{
-                "challenges":[0, 1]
+        "src_stats":[
+            {
+                "name":"challenges",
+                "to_dst":[
+                    {
+                        "name":"users",
+                        "counts":{
+                            "num_failed":0,
+                            "num_total":1
+                        }
+                    }
+                ]
             }
-        }
+        ],
+        "dst_stats":[
+            {
+                "name":"users",
+                "from_src":[
+                    {
+                        "name":"challenges",
+                        "counts":{
+                            "num_failed":0,
+                            "num_total":1
+                        }
+                    }
+                ]
+            }
+        ]
     },
     "fugleman":{
         "properties":{
             "accepted":{
                 "relevant":true,
-                "counts":[1, 2]
+                "counts":{
+                    "num_failed":1,
+                    "num_total":2
+                }
             }
         },
         "targets":["users"],
         "sources":["challenges"],
-        "counts":[1, 2],
-        "src_stats":{
-            "challenges":{
-                "users":[1, 2]
-            }
+        "counts":{
+            "num_failed":1,
+            "num_total":2
         },
-        "dst_stats":{
-            "users":{
-                "challenges":[1, 2]
+        "src_stats":[
+            {
+                "name":"challenges",
+                "to_dst":[
+                    {
+                        "name":"users",
+                        "counts":{
+                            "num_failed":1,
+                            "num_total":2
+                        }
+                    }
+                ]
             }
-        }
+        ],
+        "dst_stats":[
+            {
+                "name":"users",
+                "from_src":[
+                    {
+                        "name":"challenges",
+                        "counts":{
+                            "num_failed":1,
+                            "num_total":2
+                        }
+                    }
+                ]
+            }
+        ]
     }
 }, "all":{
-    "node_counts":[2, 9],
-    "connection_counts":[2, 6]
+    "node_counts":{
+        "num_failed":2,
+        "num_total":9
+    },
+    "connection_counts":{
+        "num_failed":2,
+        "num_total":6
+    }
 }}

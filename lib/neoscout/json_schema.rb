@@ -3,7 +3,7 @@ module NeoScout
   class Counter
 
     def to_json
-      [ num_failed, num_total ]
+      { 'num_failed' => num_failed, 'num_total' => num_total }
     end
 
   end
@@ -113,13 +113,24 @@ module NeoScout
 
       edges_json = JSON.cd(json, %w(connections))
       @edge_link_src_stats.each_pair do |type, hash|
-        JSON.cd(edges_json, [type])['src_stats'] = hash.to_json
+        JSON.cd(edges_json, [type])['src_stats'] = hash_to_json_array('to_dst', hash)
       end
 
       @edge_link_dst_stats.each_pair do |type, hash|
-        JSON.cd(edges_json, [type])['dst_stats'] = hash.to_json
+        JSON.cd(edges_json, [type])['dst_stats'] = hash_to_json_array('from_src', hash)
       end
     end
 
+    def hash_to_json_array(target, hash)
+      result = []
+      hash.each_pair do |key, value|
+        inner = []
+        value.each_pair do |i_key, i_value|
+          inner << { 'name' => i_key, 'counts' => i_value.to_json }
+        end
+        result << { 'name' => key, target => inner }
+      end
+      result
+    end
   end
 end

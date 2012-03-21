@@ -73,7 +73,7 @@ module NeoScout
       @it.incr_ok
       @it.incr_ok
       @it.incr_failed
-      @it.to_json.should be == [ 1, 4 ]
+      @it.to_json.should be == { 'num_failed' => 1, 'num_total' => 4 }
     end
 
   end
