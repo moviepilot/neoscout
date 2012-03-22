@@ -4,6 +4,7 @@
 *** DONE type testing mechanism
 *** DONE cardconstraints if ever: nixed, to be replaced with pacer-jogger constraints in 0.2
 *** visualization
+*** read-only mode for neo4j
 ** Integration and (alongside) testing
 *** put into sheldon
 *** limit number of queries / share results(?)
@@ -23,3 +24,4 @@
 *** Push options to sinatra
 *** Better initialization (i.e. register types)
 ** Support for blueprints graphs (?)
+** Parallelize iteration over graph

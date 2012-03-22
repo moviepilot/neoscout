@@ -4,5 +4,6 @@ doc
 db
 pkg
 html
+package
 coverage
 bin
