@@ -1,3 +1,3 @@
 module NeoScout
-  VERSION = '0.1pre'
+  VERSION = '0.1'
 end

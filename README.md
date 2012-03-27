@@ -1,15 +1,11 @@
 # neoscout
 
-Neoscout is a tool for verifying the schema and visualizing the structure of graph databases. It is currently geared
-exclusively towards neo4j but could easily be extended for other graph stores.
+Neoscout is a tool for verifying the schema and visualizing the structure of graph databases. It is currently geared exclusively towards neo4j but could easily be extended for other graph stores.
 
 
 ## Overview
 
-neoscout walks a graph by iterating over edges and nodes (= graph element). For each visited graph element,
-schema properties are verified.  Depending on wether the element passes all requirements, it is considered
-verified or failed and counted.  Required schema properties are either set programmatically or parsed from
-a JSON schema file as described below.
+neoscout walks a graph by iterating over edges and nodes (= graph element). For each visited graph element, schema properties are verified.  Depending on wether the element passes all requirements, it is considered verified or failed and counted.  Required schema properties are either set programmatically or parsed from a JSON schema file as described below.
 
 The general programmatic use of neoscout is:
 
