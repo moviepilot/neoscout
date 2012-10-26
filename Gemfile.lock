@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    neoscout (0.1)
+    neoscout (0.1.1)
       httparty
       json
       neo4j-core (~> 2.0.1)
@@ -13,14 +13,14 @@ GEM
   specs:
     coderay (1.0.6)
     diff-lcs (1.1.3)
-    httparty (0.8.3)
+    httparty (0.9.0)
       multi_json (~> 1.0)
       multi_xml
-    json (1.7.3-java)
+    json (1.7.5-java)
     method_source (0.7.1)
     multi_json (1.1.0)
     multi_xml (0.5.1)
-    neo4j-community (1.7.1-java)
+    neo4j-community (1.8-java)
     neo4j-core (2.0.1-java)
       neo4j-community (>= 1.7.0)
     neo4j-wrapper (2.0.1-java)
@@ -45,7 +45,7 @@ GEM
       multi_json (~> 1.0)
       simplecov-html (~> 0.5.3)
     simplecov-html (0.5.3)
-    sinatra (1.3.2)
+    sinatra (1.3.3)
       rack (~> 1.3, >= 1.3.6)
       rack-protection (~> 1.2)
       tilt (~> 1.3, >= 1.3.3)
