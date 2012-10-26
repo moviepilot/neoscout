@@ -4,8 +4,8 @@ PATH
     neoscout (0.1.1)
       httparty
       json
-      neo4j-core (~> 2.0.1)
-      neo4j-wrapper (~> 2.0.1)
+      neo4j-core (~> 2.2.0)
+      neo4j-wrapper (~> 2.2.0)
       sinatra
 
 GEM

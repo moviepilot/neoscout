@@ -27,8 +27,8 @@ Gem::Specification.new do |s|
   s.add_dependency 'httparty'
   s.add_dependency 'json'
 
-  s.add_dependency 'neo4j-core', '~>2.0.1'
-  s.add_dependency 'neo4j-wrapper', '~>2.0.1'
+  s.add_dependency 'neo4j-core', '~>2.2.0'
+  s.add_dependency 'neo4j-wrapper', '~>2.2.0'
 
   s.add_development_dependency 'pry'
   s.add_development_dependency 'rspec'
